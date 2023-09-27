@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Semestre 1",
+    "startDate" : "2023-09-01",
+    "endDate" : "2023-01-01"
+  },
+  {
+    "name": "Semestre 2",
+    "startDate" : "2023-01-01",
+    "endDate" : "2023-01-01"
+  },
+  {
+    "name": "Semestre 3",
+    "startDate" : "2023-01-01",
+    "endDate" : "2023-01-01"
+  }
+]

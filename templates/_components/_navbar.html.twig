@@ -1,0 +1,17 @@
+{% block head %}
+    {% block stylesheets %}
+        <link href="{{ asset('css/navbar.css') }}" type="text/css" rel="stylesheet" />
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+    <header class="header">
+        <a href="#" class="logo">EDT</a>
+
+        <nav class="navbar">
+            <a href="/">Accueil</a>
+            <a href="#">Historique</a>
+            <a href="#">Profil</a>
+        </nav>
+    </header>
+{% endblock %}
