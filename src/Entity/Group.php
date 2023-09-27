@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
@@ -9,7 +10,6 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Repository\GroupRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
@@ -40,6 +40,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
     ]
 )]
+#[ORM\Table(name: 'groups')]
 class Group
 {
     #[ORM\Id]
