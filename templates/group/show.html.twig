@@ -1,0 +1,18 @@
+{# templates/group/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Groupe{{ group.lib }}{% endblock %}
+
+{% block body %}
+    <h1>Détails du Groupe</h1>
+    <dl>
+        <dt>Libellé</dt>
+        <dd>{{ group.lib }}</dd>
+
+        <dt>Type</dt>
+        <dd>{{ group.type }}</dd>
+    </dl>
+
+    <a href="{{ path('group_index') }}">Retour à la liste des groupes</a>
+{% endblock %}
