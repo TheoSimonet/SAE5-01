@@ -6,7 +6,7 @@
     <p><strong>Nom :</strong> {{ user.lastname }}</p>
     <p><strong>Email :</strong> {{ user.email }}</p>
     <p><strong>Statut :</strong> {{ user.roles[0] }}</p>
-    <p><strong>Adresse :</strong> {{ user.address }}</p>
+    <p><strong>Adresse :</strong> {{ user.address }}  | {{ user.postalCode }}  {{ user.city }}</p>
     <p><strong>Téléphone :</strong> {{ user.phone }}</p>
     <a href="{{ path('app_user') }}">Accueil</a>
 {% endblock %}
