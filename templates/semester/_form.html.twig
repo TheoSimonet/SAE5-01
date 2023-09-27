@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Création d'une annonce
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mt-4">Création d'un semestre</h1>
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            <div class="form-error">
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.startDate) }}
+            {{ form_widget(form.startDate) }}
+            <div class="form-error">
+                {{ form_errors(form.startDate) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.endDate) }}
+            {{ form_widget(form.endDate) }}
+            <div class="form-error">
+                {{ form_errors(form.endDate) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}
