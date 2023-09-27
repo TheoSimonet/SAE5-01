@@ -22,13 +22,24 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
             ])
+            ->add('phone', TextType::class, [
+                'label' => 'Téléphone',
+            ])
+            ->add('address', TextType::class, [
+                'label' => 'Adresse',
+            ])
+            ->add('postalCode', TextType::class, [
+                'label' => 'Code postal',
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'Ville',
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
         ]);
     }
 }

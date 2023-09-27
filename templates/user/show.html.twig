@@ -8,5 +8,5 @@
     <p><strong>Statut :</strong> {{ user.roles[0] }}</p>
     <p><strong>Adresse :</strong> {{ user.address }}  | {{ user.postalCode }}  {{ user.city }}</p>
     <p><strong>Téléphone :</strong> {{ user.phone }}</p>
-    <a href="{{ path('app_user') }}">Accueil</a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier le profil</a>
 {% endblock %}

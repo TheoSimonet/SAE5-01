@@ -3,7 +3,7 @@
 
     <div class="form-group">
         {{ form_label(form.firstname, 'Prénom') }}
-        {{ form_widget(form.firstname, { 'attr': {'class': 'form-control'} }) }}²
+        {{ form_widget(form.firstname, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.firstname) }}
     </div>
 
@@ -18,6 +18,31 @@
         {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.email) }}
     </div>
+
+    <div class="form-group">
+        {{ form_label(form.address, 'Adresse') }}
+        {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.address) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.city, 'Ville') }}
+        {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.city) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.postalCode, 'Code postal') }}
+        {{ form_widget(form.postalCode, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.postalCode) }}
+
+    <div class="form-group">
+        {{ form_label(form.phone, 'Téléphone') }}
+        {{ form_widget(form.phone, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.phone) }}
+    </div>
+
+
 
 
     <button type="submit" class="btn btn-primary">Soumettre</button>
