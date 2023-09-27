@@ -1,4 +1,6 @@
 {
+    "name": "bous0056/symfony-for-sale",
+    "description": "development of a website for small ads using Symfony 6.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -11,7 +13,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
         "phpdocumentor/reflection-docblock": "^5.3",
-        "phpstan/phpdoc-parser": "^1.24",
+        "phpstan/phpdoc-parser": "^1.23",
+        "stof/doctrine-extensions-bundle": "^1.8",
         "symfony/asset": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/doctrine-messenger": "6.3.*",
@@ -45,7 +48,8 @@
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "phpro/grumphp": true
         },
         "sort-packages": true
     },
@@ -78,6 +82,28 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "symfony serve"
+        ],
+        "test:cs" : [
+            "php-cs-fixer fix --dry-run"
+        ],
+        "fix:cs": [
+            "php-cs-fixer fix"
+        ],
+        "test:yaml": [
+            "php bin/console lint:yaml config"
+        ],
+        "test:twig": [
+            "php bin/console lint:twig templates"
+        ],
+        "db": [
+            "php bin/console doctrine:database:drop --force --if-exists",
+            "php bin/console doctrine:database:create",
+            "php bin/console doctrine:migrations:migrate --no-interaction",
+            "php bin/console doctrine:fixtures:load --no-interaction"
         ]
     },
     "conflict": {
@@ -90,6 +116,9 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "friendsofphp/php-cs-fixer": "^3.25",
+        "phpro/grumphp": "^2.0",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.3.*",
         "symfony/css-selector": "6.3.*",
@@ -97,6 +126,16 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^6.3",
         "symfony/stopwatch": "6.3.*",
-        "symfony/web-profiler-bundle": "6.3.*"
+        "symfony/web-profiler-bundle": "6.3.*",
+        "zenstruck/foundry": "^1.35"
+    },
+
+    "scripts-descriptions": {
+        "start": "Used to run the server",
+        "test:cs": "Used to test the code through PHP CS Fixer",
+        "fix:cs": "Used to fix the code through PHP CS Fixer",
+        "test:yaml": "Used to test the configuration of the YAML files contained in the 'config' repository.",
+        "test:twig": "Runs the command used to check the Twig files contained in the 'templates' repository.",
+        "db": "Drops the database and rebuilds it with new data"
     }
 }
