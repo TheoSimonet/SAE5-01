@@ -71,7 +71,7 @@ class Semester
         return $this->name;
     }
 
-    #[Groups(['get_Semester','set_Semester'])]
+    #[Groups(['get_Semester', 'set_Semester'])]
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -84,7 +84,7 @@ class Semester
         return $this->startDate;
     }
 
-    #[Groups(['get_Semester','set_Semester'])]
+    #[Groups(['get_Semester', 'set_Semester'])]
     public function setStartDate(\DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
@@ -97,7 +97,7 @@ class Semester
         return $this->endDate;
     }
 
-    #[Groups(['get_Semester','set_Semester'])]
+    #[Groups(['get_Semester', 'set_Semester'])]
     public function setEndDate(\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
