@@ -4,13 +4,13 @@
 
 {% block body %}
     <h1>Liste des semestres</h1>
-    <a href="{{ path('app_semesters_new') }}">Ajouter un semestre</a>
+    <a href="{{ path('app_semester_new') }}">Ajouter un semestre</a>
     <div>
         <ul>
             {% for semester in semesters %}
                 <li>
                     {{ semester.name }} : du {{ semester.startDate|date('d/m/Y') }} au {{ semester.endDate|date('d/m/Y') }}
-                    <a href="/">Modifier</a>
+                    <a href="{{ path('app_semester_edit', {'id': semester.id}) }}">Modifier</a>
                     <a href="{{ path('app_semester_delete', {'id': semester.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce semestre ?')">Supprimer</a>
                 </li>
             {% endfor %}

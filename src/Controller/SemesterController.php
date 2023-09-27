@@ -23,7 +23,7 @@ class SemesterController extends AbstractController
         ]);
     }
 
-    #[Route('/semesters/new', name: 'app_semesters_new', methods: ['GET', 'POST'])]
+    #[Route('/semesters/new', name: 'app_semester_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $semester = new Semester();
@@ -36,6 +36,22 @@ class SemesterController extends AbstractController
             $manager->persist($semester);
             $manager->flush();
 
+            return $this->redirectToRoute('app_semester');
+        }
+
+        return $this->render('/semester/_form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/semesters/edit/{id}', 'app_semester_edit', methods: ['GET', 'POST'])]
+    public function edit(Semester $semester, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(SemesterType::class, $semester);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->flush();
             return $this->redirectToRoute('app_semester');
         }
 
