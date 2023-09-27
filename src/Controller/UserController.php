@@ -9,9 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/user', name: 'app_user')]
     public function index(): Response
     {
@@ -19,6 +21,7 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
+
     #[Route('/user/{id}', name: 'app_user_show', requirements: ['id' => '\d+'])]
     public function show(User $user): Response
     {
@@ -53,6 +56,4 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
 }
