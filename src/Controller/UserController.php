@@ -22,9 +22,15 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}', name: 'app_user_show', requirements: ['id' => '\d+'])]
-    public function show(User $user): Response
+    #[Route('/me', name: 'app_user_show')]
+    public function showCurrentUser(): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page');
+        }
+        $userId = $user->getId();
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
