@@ -5,14 +5,11 @@ namespace App\Controller;
 use App\Entity\Period;
 use App\Form\PeriodType;
 use App\Repository\PeriodRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use Doctrine\ORM\EntityManagerInterface;
-
-use Symfony\Component\HttpFoundation\Request;
-
 
 class PeriodController extends AbstractController
 {
@@ -41,7 +38,7 @@ class PeriodController extends AbstractController
             return $this->redirectToRoute('app_period');
         }
 
-        return $this->render('period/new.html.twig', [
+        return $this->render('period/_form.html.twig', [ // Utilisation de _form.html.twig
             'form' => $form->createView(),
         ]);
     }
@@ -57,8 +54,16 @@ class PeriodController extends AbstractController
             return $this->redirectToRoute('app_period');
         }
 
-        return $this->render('period/edit.html.twig', [
+        return $this->render('period/_form.html.twig', [ // Utilisation de _form.html.twig
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/periods/delete/{id}', name: 'app_period_delete', methods: ['GET'])]
+    public function delete(EntityManagerInterface $manager, Period $period): Response
+    {
+        $manager->remove($period);
+        $manager->flush();
+        return $this->redirectToRoute('app_period');
     }
 }
