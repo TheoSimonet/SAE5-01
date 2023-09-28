@@ -3,8 +3,3 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-
-excel_to_json:
-    path: '/convert-excel-to-json'
-    controller: 'App\Controller\ExcelToJsonController::convertExcelToJson'
-    methods: ['POST']
