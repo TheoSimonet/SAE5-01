@@ -18,19 +18,18 @@
                 {% endif %}
             </div>
         {% endif %}
+            <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+            <label for="inputLogin">Login</label>
+            <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" autocomplete="username" required autofocus>
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-        <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-        <label for="inputLogin">Login</label>
-        <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" autocomplete="username" required autofocus>
-        <label for="inputPassword">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-        <button class="btn_connexion" type="submit">
-            Continuer
-        </button>
+            <button class="btn_connexion" type="submit">
+                Continuer
+            </button>
     </form>
 {% endblock %}
