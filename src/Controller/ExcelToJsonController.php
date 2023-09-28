@@ -4,33 +4,39 @@ namespace App\Controller;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Shuchkin\SimpleXLSX;
+
 
 class ExcelToJsonController extends AbstractController
 {
-    #[Route('/convert-excel-to-json', name: 'app_convert_excel_to_json')]
-
-    public function convertExcelToJson(Request $request)
+    #[Route('/subjects', name: 'app_subjects')]
+    public function uploadFile(Request $request, ParameterBagInterface $parameterBag): Response
     {
-        $excelFile = $request->files->get('excel_file');
+        $uploadedFile = $request->files->get('file');
 
-        if ($excelFile) {
-            $spreadsheet = IOFactory::load($excelFile);
+        if ($uploadedFile instanceof UploadedFile) {
+            $filename = $uploadedFile->getClientOriginalName();
 
-            $worksheet = $spreadsheet->getActiveSheet();
+            $uploadedFile->move(
+                $this->getParameter('uploads_directory'),
+                $filename
+            );
 
-            $data = [];
-            foreach ($worksheet->toArray() as $row) {
-                $data[] = $row;
+            if ($xlsx = SimpleXLSX::parse($this->getParameter('uploads_directory') . '/' . $filename)) {
+                $data = $xlsx->rows();
+                return new JsonResponse($data);
+            } else {
+                $error = SimpleXLSX::parseError();
+                return new JsonResponse(['error' => $error], 400);
             }
-
-            $jsonData = json_encode($data);
-
-            return new JsonResponse($jsonData, 200, [], true);
         } else {
-            return new JsonResponse(['error' => 'Fichier Excel non trouvé.'], 400);
+            return new JsonResponse(['error' => 'No file uploaded'], 400);
         }
     }
 }
