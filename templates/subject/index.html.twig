@@ -2,10 +2,15 @@
 
 {% block title %}Hello SubjectController!{% endblock %}
 
+{% block javascripts %}
+    <script src="{{ asset('js/subject/uploadExcel.js') }}" defer></script>
+{% endblock %}
+
 {% block body %}
-    <form method="post" action="{{ path('excel_to_json') }}" enctype="multipart/form-data">
-        <input type="file" name="excel_file">
-        <button type="submit">Convertir en JSON</button>
+    <form id="uploadForm" enctype="multipart/form-data" action="{{ path('app_subjects') }}" method="POST">
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Excel File" name="submit">
     </form>
 
+    <div id="result"></div>
 {% endblock %}
