@@ -36,7 +36,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}/edit', name: 'app_user_edit', requirements: ['id' => '\d+'])]
+    #[Route('/me/edit/{id}', name: 'app_user_edit', requirements: ['id' => '\d+'])]
     public function edit(ManagerRegistry $doctrine, Request $request, User $user): Response
     {
         $form = $this->createForm(userType::class, $user);
