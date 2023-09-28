@@ -17,8 +17,8 @@ class SemesterController extends AbstractController
     public function index(SemesterRepository $repository): Response
     {
         $semesters = $repository->findAll();
+
         return $this->render('semester/index.html.twig', [
-            'controller_name' => 'SemesterController',
             'semesters' => $semesters,
         ]);
     }
@@ -52,6 +52,7 @@ class SemesterController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
+
             return $this->redirectToRoute('app_semester');
         }
 
@@ -60,13 +61,12 @@ class SemesterController extends AbstractController
         ]);
     }
 
-
     #[Route('/semesters/delete/{id}', 'app_semester_delete', methods: ['GET'])]
     public function delete(EntityManagerInterface $manager, Semester $semester): Response
     {
         $manager->remove($semester);
         $manager->flush();
+
         return $this->redirectToRoute('app_semester');
     }
-
 }
