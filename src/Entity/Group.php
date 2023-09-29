@@ -29,13 +29,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
         ),
         new Put(
-            normalizationContext: ['groups' => ['get_Semester']],
-            denormalizationContext: ['groups' => ['set_Semester']],
+            normalizationContext: ['groups' => ['get_Group']],
+            denormalizationContext: ['groups' => ['set_Group']],
             security: "is_granted('ROLE_USER') and object == user"
         ),
         new Patch(
-            normalizationContext: ['groups' => ['get_Semester']],
-            denormalizationContext: ['groups' => ['set_Semester']],
+            normalizationContext: ['groups' => ['get_Group']],
+            denormalizationContext: ['groups' => ['set_Group']],
             security: "is_granted('ROLE_USER') and object == user"
         ),
     ]
@@ -45,15 +45,15 @@ class Group
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     #[Groups(['group:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['group:read', 'group:write'])]
     private ?string $lib = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['group:read', 'group:write'])]
     private ?string $type = null;
 
