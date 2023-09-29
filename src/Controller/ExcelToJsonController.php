@@ -4,39 +4,41 @@ namespace App\Controller;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Shuchkin\SimpleXLSX;
-
+use Symfony\Component\Routing\Annotation\Route;
 
 class ExcelToJsonController extends AbstractController
 {
-    #[Route('/subjects', name: 'app_subjects')]
-    public function uploadFile(Request $request, ParameterBagInterface $parameterBag): Response
+    #[Route('/upload', name: 'app_upload')]
+    public function upload(Request $request): Response
     {
-        $uploadedFile = $request->files->get('file');
+        if ($request->isMethod('POST')) {
+            $file = $request->files->get('file');
 
-        if ($uploadedFile instanceof UploadedFile) {
-            $filename = $uploadedFile->getClientOriginalName();
+            if ($file && $file->isValid()) {
+                $spreadsheet = IOFactory::load($file->getPathname());
 
-            $uploadedFile->move(
-                $this->getParameter('uploads_directory'),
-                $filename
-            );
+                $allData = [];
 
-            if ($xlsx = SimpleXLSX::parse($this->getParameter('uploads_directory') . '/' . $filename)) {
-                $data = $xlsx->rows();
-                return new JsonResponse($data);
+                foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                    $sheetName = $worksheet->getTitle();
+                    $data = $worksheet->toArray();
+
+                    if ($data) {
+                        $allData[$sheetName] = $data;
+                    } else {
+                        $this->addFlash('error', 'No data found in sheet: ' . $sheetName);
+                    }
+                }
             } else {
-                $error = SimpleXLSX::parseError();
-                return new JsonResponse(['error' => $error], 400);
+                $this->addFlash('error', 'Invalid file');
             }
-        } else {
-            return new JsonResponse(['error' => 'No file uploaded'], 400);
         }
+
+        return $this->render('subject/index.html.twig', [
+            'data' => $allData ?? null,
+        ]);
     }
 }
