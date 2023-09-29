@@ -1,6 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/formProfil.css') }}">
+{% endblock %}
+
 {% block body %}
     {{ form_start(form) }}
-
+    <h1>Modifier Profil</h1>
     <div class="form-group">
         {{ form_label(form.firstname, 'Prénom') }}
         {{ form_widget(form.firstname, { 'attr': {'class': 'form-control'} }) }}
@@ -45,7 +51,7 @@
 
 
 
-    <button type="submit" class="btn btn-primary">Soumettre</button>
+    <button type="submit" class="btn_edit_profil">Modifier</button>
 
     {{ form_end(form) }}
 {% endblock %}
