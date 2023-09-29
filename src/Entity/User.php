@@ -2,21 +2,61 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use App\Controller\GetMeController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['get_User']]
+        ),
+        new GetCollection(
+            uriTemplate: '/me',
+            controller: GetMeController::class,
+            openapiContext: [
+                'responses' => [
+                    '200', '401' => [
+                        'description' => 'Get connected User',
+                        'summary' => 'Get connected User',
+                    ],
+                ],
+            ],
+            paginationEnabled: false,
+            normalizationContext: ['groups' => ['get_Me', 'get_User']],
+            security: "is_granted('ROLE_USER')"
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['set_User']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['set_User']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+    ],
+    normalizationContext: ['groups' => ['get_User', 'get_Me']]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_User'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['set_User', 'get_Me', 'get_User'])]
     private ?string $login = null;
 
     #[ORM\Column]
@@ -29,24 +69,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_User', 'set_User'])]
     private ?string $email = null;
 
     public function getId(): ?int

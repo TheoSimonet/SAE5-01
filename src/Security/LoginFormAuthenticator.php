@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +16,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
+
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -29,7 +34,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         $login = $request->request->get('login', '');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $login);
+        $request->getSession()->set(Security::LAST_USERNAME, $login);
 
         return new Passport(
             new UserBadge($login),
@@ -44,12 +49,32 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        return new RedirectResponse('/user');
-
+        return new RedirectResponse($this->urlGenerator->generate('api'));
     }
 
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+    }
+
+    /**
+     * Override to control what happens when the user hits a secure page
+     * but isn't logged in yet.
+     *
+     * @return RedirectResponse
+     *
+     * @throws HttpException
+     */
+    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
+    {
+        /** @var string $route current route */
+        $route = $request->get('_route');
+        // API route ?
+        if (str_starts_with($route, '_api_')) {
+            throw new HttpException(Response::HTTP_UNAUTHORIZED);
+        }
+        $url = $this->getLoginUrl($request);
+
+        return new RedirectResponse($url);
     }
 }
