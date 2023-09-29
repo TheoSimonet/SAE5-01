@@ -1,0 +1,16 @@
+{# templates/group/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Groupes{% endblock %}
+
+{% block body %}
+    <h1>Liste des Groupes</h1>
+    <ul>
+        {% for group in groups %}
+            <li>
+                <a href="{{ path('group_show', {'id': group.id}) }}">{{ group.lib }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
