@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Group;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
-use Doctrine\ORM\EntityManagerInterface; // Importez l'EntityManager
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GroupController extends AbstractController
 {
-    private $entityManager; // Déclarez une propriété privée pour l'EntityManager
+    private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager; // Injectez l'EntityManager dans le constructeur
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/groups', name: 'group_index')]
@@ -45,7 +45,7 @@ class GroupController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush(); // Utilisez l'EntityManager injecté
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('group_show', ['id' => $group->getId()]);
         }
@@ -56,25 +56,4 @@ class GroupController extends AbstractController
         ]);
     }
 
-    #[Route('/groups/new', name: 'group_new')]
-    public function new(Request $request): Response
-    {
-        $group = new Group();
-        $form = $this->createForm(GroupType::class, $group);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($group);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('group_show', ['id' => $group->getId()]);
-        }
-
-        return $this->render('group/new.html.twig', [
-            'group' => $group,
-            'form' => $form->createView(),
-        ]);
-    }
-
 }
-
