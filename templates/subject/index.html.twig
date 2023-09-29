@@ -1,16 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SubjectController!{% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('js/subject/uploadExcel.js') }}" defer></script>
-{% endblock %}
-
 {% block body %}
-    <form id="uploadForm" enctype="multipart/form-data" action="{{ path('app_subjects') }}" method="POST">
-        <input type="file" name="fileToUpload" id="fileToUpload">
-        <input type="submit" value="Upload Excel File" name="submit">
+    <h1>Upload Excel</h1>
+
+    {% if app.flashes('error') is not empty %}
+        <div class="alert alert-danger">
+            {% for message in app.flashes('error') %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Submit</button>
     </form>
 
-    <div id="result"></div>
+    {% if data is defined %}
+        {% for sheetName, sheetData in data %}
+            <h2>Data from {{ sheetName }}</h2>
+            <table>
+                {% for row in sheetData %}
+                    <tr>
+                        {% for col in row %}
+                            <td>{{ col }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
