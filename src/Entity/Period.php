@@ -1,14 +1,12 @@
 <?php
-
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PeriodRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PeriodRepository::class)]
-#[ApiResource]
 class Period
 {
     #[ORM\Id]
@@ -22,11 +20,22 @@ class Period
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $weekStart = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $weekEnd = null;
+
+    /**
+     * @var Collection|Semester[]
+     */
+    #[ORM\ManyToMany(targetEntity: Semester::class, mappedBy: 'periods')]
+    private $semesters;
+
+    public function __construct()
+    {
+        $this->semesters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -38,7 +47,8 @@ class Period
         return $this->name;
     }
 
-    public function setName(string $name): static
+    #[ORM\PrePersist]
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -50,7 +60,8 @@ class Period
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    #[ORM\PrePersist]
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -62,7 +73,8 @@ class Period
         return $this->weekStart;
     }
 
-    public function setWeekStart(\DateTimeInterface $weekStart): static
+    #[ORM\PrePersist]
+    public function setWeekStart(\DateTimeInterface $weekStart): self
     {
         $this->weekStart = $weekStart;
 
@@ -74,10 +86,21 @@ class Period
         return $this->weekEnd;
     }
 
-    public function setWeekEnd(\DateTimeInterface $weekEnd): static
+    #[ORM\PrePersist]
+    public function setWeekEnd(\DateTimeInterface $weekEnd): self
     {
         $this->weekEnd = $weekEnd;
 
         return $this;
     }
+
+    /**
+     * @return Collection|Semester[]
+     */
+    public function getSemesters(): Collection
+    {
+        return $this->semesters;
+    }
+
 }
+
