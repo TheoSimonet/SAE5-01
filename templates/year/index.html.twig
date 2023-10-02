@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des années{% endblock %}
+
+{% block body %}
+    <h1>Liste des années</h1>
+    <ul>
+        {% for year in years %}
+            <li><a href="{{ path('year_show', {'id': year.id}) }}">{{ year.season }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
