@@ -6,14 +6,9 @@ function App() {
     return (
         <div className="app">
             <nav>
-                <ul>
-                    <li><Link href={'/react/semesters'}>Semestres</Link></li>
-                </ul>
+                <Semesterlist/>
             </nav>
             <Router>
-                <Route path="/react/semesters">
-                    <Semesterlist/>
-                </Route>
                 <Route path="/react/semesters/:id">
                     <Semester/>
                 </Route>
