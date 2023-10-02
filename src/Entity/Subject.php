@@ -33,6 +33,11 @@ use Doctrine\ORM\Mapping as ORM;
             denormalizationContext: ['groups' => ['set_Subject']],
             security: "is_granted('ROLE_USER') and object == user"
         ),
+        new Patch(
+            normalizationContext: ['groups' => ['get_Subject']],
+            denormalizationContext: ['groups' => ['set_Subject']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
         ]
 )]
 class Subject
