@@ -8,12 +8,11 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
-use App\Repository\GroupRepository;
 use App\Repository\YearRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: GroupRepository::class)]
+#[ORM\Entity(repositoryClass: YearRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
