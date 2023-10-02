@@ -1,22 +1,30 @@
 .semesterList {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centre horizontalement les éléments */
-    align-items: center; /* Centre verticalement les éléments */
+    justify-content: center;
+    align-items: center;
     background-color: #EFEFEF;
-    padding: 10px; /* Marge intérieure */
-    margin-left: 10%;
-    margin-right: 10%;
-
+    padding: 10px;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 20px;
 }
 
 .semesterList div {
+    display: flex;
+    align-items: center;
     margin-right: 10px;
+    border-right: 1px solid #dadce0;
+    padding-right: 10px;
 }
 
 .semesterList a {
-    border: 1px solid #dadce0;
-    border-radius: 20px; /* Bords arrondis */
-    background-color: red;
-    padding: 10px; /* Marge intérieure */
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.semesterList a:hover {
+    background-color: gray;
+    color: white;
 }
