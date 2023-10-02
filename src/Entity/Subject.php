@@ -66,6 +66,7 @@ class Subject
     private ?string $subjectCode = null;
 
     #[ORM\Column]
+    #[Groups(['get_Subject'])]
     private ?int $hoursTotal = null;
 
     public function getId(): ?int
