@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\GetMeController;
 use App\Repository\UserRepository;
@@ -18,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
+        new GetCollection(),
         new Get(
             normalizationContext: ['groups' => ['get_User']]
         ),
@@ -44,6 +47,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             denormalizationContext: ['groups' => ['set_User']],
             security: "is_granted('ROLE_USER') and object == user"
         ),
+        new Delete(
+            security: "is_granted('ROLE_USER') and object == user"
+        )
     ],
     normalizationContext: ['groups' => ['get_User', 'get_Me']]
 )]
@@ -66,6 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['set_User'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
