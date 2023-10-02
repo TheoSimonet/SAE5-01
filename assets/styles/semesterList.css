@@ -1,0 +1,30 @@
+.semesterList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #EFEFEF;
+    padding: 10px;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-radius: 20px;
+}
+
+.semesterList div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    border-right: 1px solid #dadce0;
+    padding-right: 10px;
+}
+
+.semesterList a {
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.semesterList a:hover {
+    background-color: gray;
+    color: white;
+}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -17,27 +18,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(),
+        new GetCollection(),
         new Post(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_USER')"
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+            security: "is_granted('ROLE_USER')"
         ),
         new Patch(
-            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+            security: "is_granted('ROLE_USER')"
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
-        ),
-        new Put(
-            normalizationContext: ['groups' => ['get_Semester']],
-            denormalizationContext: ['groups' => ['set_Semester']],
-            security: "is_granted('ROLE_USER') and object == user"
-        ),
-        new Patch(
-            normalizationContext: ['groups' => ['get_Semester']],
-            denormalizationContext: ['groups' => ['set_Semester']],
-            security: "is_granted('ROLE_USER') and object == user"
+            security: "is_granted('ROLE_USER')"
         ),
     ]
 )]
