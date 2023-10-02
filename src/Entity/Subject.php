@@ -53,10 +53,6 @@ class Subject
     #[Groups(['get_Subject'])]
     private ?string $name = null;
 
-    #[ORM\Column]
-    #[Groups(['get_Subject'])]
-    private ?int $hoursTotal = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['get_Subject'])]
     private ?\DateTimeInterface $firstWeek = null;
@@ -68,6 +64,9 @@ class Subject
     #[ORM\Column(length: 25)]
     #[Groups(['get_Subject'])]
     private ?string $subjectCode = null;
+
+    #[ORM\Column]
+    private ?int $hoursTotal = null;
 
     public function getId(): ?int
     {
@@ -83,19 +82,6 @@ class Subject
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getHoursTotal(): ?int
-    {
-        return $this->hoursTotal;
-    }
-
-    #[Groups(['get_Subject', 'set_Subject'])]
-    public function setHoursTotal(int $hoursTotal): static
-    {
-        $this->hoursTotal = $hoursTotal;
 
         return $this;
     }
@@ -134,6 +120,18 @@ class Subject
     public function setSubjectCode(string $subjectCode): static
     {
         $this->subjectCode = $subjectCode;
+
+        return $this;
+    }
+
+    public function getHoursTotal(): ?int
+    {
+        return $this->hoursTotal;
+    }
+
+    public function setHoursTotal(int $hoursTotal): static
+    {
+        $this->hoursTotal = $hoursTotal;
 
         return $this;
     }
