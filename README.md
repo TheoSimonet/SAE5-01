@@ -22,18 +22,38 @@ Programmes/logiciels/ressources utilisés pour développer le projet :
 
 ## Installation / Configuration
 
-Lancement du serveur Web de test :
-* ``composer start``
+### Install Symfony
 
-Vérification du code :
-* ``composer test:cs``
+```bash
+composer install
+```
 
-Correction du code :
-* ``composer fix:cs``
+### Install React App
 
-## Tests
+```bash
+npm install
+```
 
-Lancement des tests :
-* ``composer test:codeception``
+### Run database server
 
-test-push dépôt distant
+```bash
+docker-compose up -d
+```
+
+### Install database
+
+```bash
+composer db
+```
+
+### Build front assets with Webpack Encore
+
+```bash
+npm run build
+```
+
+### Run Symfony server
+
+```bash
+symfony server:start
+```
