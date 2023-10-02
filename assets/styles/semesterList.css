@@ -1,0 +1,22 @@
+.semesterList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centre horizontalement les éléments */
+    align-items: center; /* Centre verticalement les éléments */
+    background-color: #EFEFEF;
+    padding: 10px; /* Marge intérieure */
+    margin-left: 10%;
+    margin-right: 10%;
+
+}
+
+.semesterList div {
+    margin-right: 10px;
+}
+
+.semesterList a {
+    border: 1px solid #dadce0;
+    border-radius: 20px; /* Bords arrondis */
+    background-color: red;
+    padding: 10px; /* Marge intérieure */
+}

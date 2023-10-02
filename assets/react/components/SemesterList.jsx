@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {fetchSemesters, fetchUsers} from '../services/api';
 import {Link} from 'wouter';
-
+import "../../styles/semesterList.css"
 function Semesterlist() {
     const [semesters, setSemesters] = useState(null);
 
@@ -12,7 +12,7 @@ function Semesterlist() {
     }, []);
 
     return (
-        <div>
+        <div className={"semesterList"}>
             {semesters ===null ? 'Loading...' :
                 semesters.map((semester) => (
                     <div key={semester.id}>
