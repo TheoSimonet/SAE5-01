@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\SemesterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -53,6 +55,14 @@ class Semester
     #[Groups(['get_Semester'])]
     private ?\DateTimeInterface $endDate = null;
 
+    #[ORM\ManyToMany(targetEntity: Period::class, mappedBy: 'Semester')]
+    private Collection $periods;
+
+    public function __construct()
+    {
+        $this->periods = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +103,33 @@ class Semester
     public function setEndDate(\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Period>
+     */
+    public function getPeriods(): Collection
+    {
+        return $this->periods;
+    }
+
+    public function addPeriod(Period $period): static
+    {
+        if (!$this->periods->contains($period)) {
+            $this->periods->add($period);
+            $period->addSemester($this);
+        }
+
+        return $this;
+    }
+
+    public function removePeriod(Period $period): static
+    {
+        if ($this->periods->removeElement($period)) {
+            $period->removeSemester($this);
+        }
 
         return $this;
     }

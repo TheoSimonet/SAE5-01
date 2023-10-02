@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Période{% endblock %}
+
+{% block body %}
+    <h1>Détails de la Période</h1>
+
+    <dl class="row">
+        <dt class="col-sm-3">ID :</dt>
+        <dd class="col-sm-9">{{ period.id }}</dd>
+
+        <dt class="col-sm-3">Nom :</dt>
+        <dd class="col-sm-9">{{ period.name }}</dd>
+
+        <dt class="col-sm-3">Description :</dt>
+        <dd class="col-sm-9">{{ period.description }}</dd>
+
+        <dt class="col-sm-3">Date de début :</dt>
+        <dd class="col-sm-9">{{ period.weekStart|date('Y-m-d') }}</dd>
+
+        <dt class="col-sm-3">Date de fin :</dt>
+        <dd class="col-sm-9">{{ period.weekEnd|date('Y-m-d') }}</dd>
+    </dl>
+
+    <a href="{{ path('app_period_index') }}" class="btn btn-primary">Retour à la liste des Périodes</a>
+{% endblock %}
