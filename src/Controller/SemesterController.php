@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SemesterController extends AbstractController
 {
@@ -23,6 +24,7 @@ class SemesterController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/semesters/new', name: 'app_semester_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
@@ -44,6 +46,7 @@ class SemesterController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/semesters/edit/{id}', 'app_semester_edit', methods: ['GET', 'POST'])]
     public function edit(Semester $semester, Request $request, EntityManagerInterface $manager): Response
     {
@@ -61,6 +64,7 @@ class SemesterController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/semesters/delete/{id}', 'app_semester_delete', methods: ['GET'])]
     public function delete(EntityManagerInterface $manager, Semester $semester): Response
     {

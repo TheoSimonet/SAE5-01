@@ -6,12 +6,12 @@
 
 {% block body %}
     <header class="header">
-        <a href="#" class="logo">EDT</a>
+        <a href="/" class="logo">EDT</a>
 
         <nav class="navbar">
             <a href="/">Accueil</a>
             <a href="#">Historique</a>
-            <a href="#">Profil</a>
+            <a href="{{ path('app_user_show')}}">Profil</a>
             <a href="/logout">Déconnexion</a>
         </nav>
     </header>
