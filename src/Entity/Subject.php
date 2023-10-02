@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
@@ -22,6 +23,9 @@ use Doctrine\ORM\Mapping as ORM;
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
         ),
         new Patch(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Delete(
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
         ),
         ]
