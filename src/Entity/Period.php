@@ -1,12 +1,45 @@
 <?php
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\PeriodRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PeriodRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Put(
+            normalizationContext: ['groups' => ['get_Period']],
+            denormalizationContext: ['groups' => ['set_Period']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['get_Period']],
+            denormalizationContext: ['groups' => ['set_Period']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+    ]
+)]
 class Period
 {
     #[ORM\Id]
