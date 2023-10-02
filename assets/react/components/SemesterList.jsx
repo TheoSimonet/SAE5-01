@@ -13,7 +13,16 @@ function Semesterlist() {
 
     return (
         <div>
-            {semesters ===null ? 'Loading...' : semesters.map((semester) => (<div key={semester.id}><Link href={`/react/semesters/${semester.id}`}>{semester.name}</Link></div>))}
+            {semesters ===null ? 'Loading...' :
+                semesters.map((semester) => (
+                    <div key={semester.id}>
+                        <Link href={`/react/semesters/${semester.id}`}>
+                            {semester.name}
+                        </Link>
+                    </div>
+                    )
+                )
+            }
         </div>
     );
 }
