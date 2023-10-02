@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wish{% endblock %}
+
+{% block body %}
+    <h1>Liste des voeux</h1>
+    {% for wish in wishes %}
+        <li>
+             Voeu {{ wish.id }}
+            {# <a href="{{ path('app_wish_edit', {'id': wish.id}) }}">Modifier</a> #}
+            <a href="{{ path('app_wish_delete', {'id': wish.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce voeu ?')">Supprimer</a>
+        </li>
+    {% endfor %}
+
+{% endblock %}
