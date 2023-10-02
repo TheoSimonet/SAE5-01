@@ -10,7 +10,7 @@ function Semester() {
         getSemester(params.id).then((data) => {
             setSemester(data);
         });
-    }, []);
+    }, [params.id]);
 
     return (
         <div>
