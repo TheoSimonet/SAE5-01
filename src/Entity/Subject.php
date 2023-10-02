@@ -55,7 +55,7 @@ class Subject
 
     #[ORM\Column]
     #[Groups(['get_Subject'])]
-    private ?int $hoursPerWeek = null;
+    private ?int $hoursTotal = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['get_Subject'])]
@@ -87,15 +87,15 @@ class Subject
         return $this;
     }
 
-    public function getHoursPerWeek(): ?int
+    public function getHoursTotal(): ?int
     {
-        return $this->hoursPerWeek;
+        return $this->hoursTotal;
     }
 
     #[Groups(['get_Subject', 'set_Subject'])]
-    public function setHoursPerWeek(int $hoursPerWeek): static
+    public function setHoursTotal(int $hoursTotal): static
     {
-        $this->hoursPerWeek = $hoursPerWeek;
+        $this->hoursTotal = $hoursTotal;
 
         return $this;
     }
