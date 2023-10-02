@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -16,15 +17,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 #[ApiResource(
     operations: [
+        new GetCollection(),
         new Get(),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
-        ),
-        new Put(
-            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
-        ),
-        new Patch(
-            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
