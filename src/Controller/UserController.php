@@ -22,6 +22,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/me', name: 'app_user_show')]
     public function showCurrentUser(): Response
     {
@@ -36,6 +37,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/me/edit/{id}', name: 'app_user_edit', requirements: ['id' => '\d+'])]
     public function edit(ManagerRegistry $doctrine, Request $request, User $user): Response
     {
