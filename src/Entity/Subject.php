@@ -28,6 +28,11 @@ use Doctrine\ORM\Mapping as ORM;
         new Delete(
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
         ),
+        new Put(
+            normalizationContext: ['groups' => ['get_Subject']],
+            denormalizationContext: ['groups' => ['set_Subject']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
         ]
 )]
 class Subject
