@@ -79,6 +79,7 @@ class Subject
         return $this->name;
     }
 
+    #[Groups(['get_Subject', 'set_Subject'])]
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -91,6 +92,7 @@ class Subject
         return $this->hoursPerWeek;
     }
 
+    #[Groups(['get_Subject', 'set_Subject'])]
     public function setHoursPerWeek(int $hoursPerWeek): static
     {
         $this->hoursPerWeek = $hoursPerWeek;
@@ -103,6 +105,7 @@ class Subject
         return $this->firstWeek;
     }
 
+    #[Groups(['get_Subject', 'set_Subject'])]
     public function setFirstWeek(\DateTimeInterface $firstWeek): static
     {
         $this->firstWeek = $firstWeek;
@@ -115,6 +118,7 @@ class Subject
         return $this->lastWeek;
     }
 
+    #[Groups(['get_Subject', 'set_Subject'])]
     public function setLastWeek(\DateTimeInterface $lastWeek): static
     {
         $this->lastWeek = $lastWeek;
@@ -126,7 +130,7 @@ class Subject
     {
         return $this->subjectCode;
     }
-
+    #[Groups(['get_Subject', 'set_Subject'])]
     public function setSubjectCode(string $subjectCode): static
     {
         $this->subjectCode = $subjectCode;
