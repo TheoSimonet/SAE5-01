@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\SubjectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 #[ApiResource(
@@ -45,21 +46,27 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_Subject'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['get_Subject'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['get_Subject'])]
     private ?int $hoursPerWeek = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['get_Subject'])]
     private ?\DateTimeInterface $firstWeek = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['get_Subject'])]
     private ?\DateTimeInterface $lastWeek = null;
 
     #[ORM\Column(length: 25)]
+    #[Groups(['get_Subject'])]
     private ?string $subjectCode = null;
 
     public function getId(): ?int
