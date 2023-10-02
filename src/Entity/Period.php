@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -59,15 +60,12 @@ class Period
     #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $weekEnd = null;
 
-    /**
-     * @var Collection|Semester[]
-     */
-    #[ORM\ManyToMany(targetEntity: Semester::class, mappedBy: 'periods')]
-    private $semesters;
+    #[ORM\ManyToMany(targetEntity: Semester::class, inversedBy: 'periods')]
+    private Collection $Semester;
 
     public function __construct()
     {
-        $this->semesters = new ArrayCollection();
+        $this->Semester = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,12 +126,26 @@ class Period
     }
 
     /**
-     * @return Collection|Semester[]
+     * @return Collection<int, Semester>
      */
-    public function getSemesters(): Collection
+    public function getSemester(): Collection
     {
-        return $this->semesters;
+        return $this->Semester;
     }
 
-}
+    public function addSemester(Semester $semester): static
+    {
+        if (!$this->Semester->contains($semester)) {
+            $this->Semester->add($semester);
+        }
 
+        return $this;
+    }
+
+    public function removeSemester(Semester $semester): static
+    {
+        $this->Semester->removeElement($semester);
+
+        return $this;
+    }
+}
