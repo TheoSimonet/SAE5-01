@@ -48,7 +48,7 @@ final class SubjectFactory extends ModelFactory
     {
         return [
             'firstWeek' => self::faker()->dateTime(),
-            'hoursPerWeek' => self::faker()->randomNumber('4'),
+            'hoursTotal' => self::faker()->randomNumber('4'),
             'lastWeek' => self::faker()->dateTime(),
             'name' => self::faker()->text(15),
             'subjectCode' => self::faker()->text(5),
