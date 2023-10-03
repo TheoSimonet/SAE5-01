@@ -69,6 +69,7 @@ class Subject
 
     #[ORM\ManyToOne(inversedBy: 'subject')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_User', 'set_User'])]
     private ?Semester $semester = null;
 
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]

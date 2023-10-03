@@ -59,6 +59,7 @@ class Semester
     private Collection $periods;
 
     #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class, orphanRemoval: true)]
+    #[Groups(['get_User', 'set_User'])]
     private Collection $subject;
 
     public function __construct()
