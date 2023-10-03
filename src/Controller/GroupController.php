@@ -7,9 +7,11 @@ use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class GroupController extends AbstractController
 {
@@ -56,4 +58,38 @@ class GroupController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/react', name: 'app_react')]
+    #[Route('/react/groups', name: 'app_react_groups')]
+    #[Route('/react/groups/{id}', name: 'app_react_group', requirements: ['id' => '\d+'])]
+    public function react(): Response
+    {
+        return $this->render('group/react.html.twig');
+    }
+
+    #[Route('/api/groups', name: 'group_list', methods: ['GET'])] // Ajout de la route pour la liste des groupes en GET
+    public function list(GroupRepository $groupRepository): JsonResponse
+    {
+        $groups = $groupRepository->findAll();
+
+        return $this->json($groups, Response::HTTP_OK, [], ['groups' => 'group:read']);
+    }
+
+    #[Route('/api/groups', name: 'group_create', methods: ['POST'])]
+    public function create(Request $request): Response
+    {
+        $group = new Group();
+        $form = $this->createForm(GroupType::class, $group);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($group);
+            $this->entityManager->flush();
+
+            return $this->json($group, Response::HTTP_CREATED);
+        }
+
+        return $this->json($form->getErrors(true, false), Response::HTTP_BAD_REQUEST);
+    }
 }
