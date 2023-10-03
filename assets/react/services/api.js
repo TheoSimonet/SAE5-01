@@ -24,3 +24,14 @@ export function getGroup(id) {
 
 
 
+
+export function getMe()
+{
+    return fetch(`${BASE_URL}/me`, {credentials: "include"}).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else if (response.status === 401) {
+            return Promise.resolve(null);
+        }});
+}
+
