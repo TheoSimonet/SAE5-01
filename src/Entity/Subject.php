@@ -52,19 +52,19 @@ class Subject
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?\DateTimeInterface $firstWeek = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?\DateTimeInterface $lastWeek = null;
 
     #[ORM\Column(length: 25)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $subjectCode = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $hoursTotal = null;
 
     #[ORM\ManyToOne(inversedBy: 'subject')]
