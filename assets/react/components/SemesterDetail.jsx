@@ -23,8 +23,12 @@ function Semester() {
                         {semester.subject.map((subject) => (
                             <li key={subject['@id']} className="semester-li">
                                 {subject.subjectCode + ' - ' + subject.name}
-                                <br/>
-                                <p>Groupes:</p>
+                                <br/><br/>
+                                <p className="groupe">Groupes |</p>
+                                <div className="Postuler-container">
+                                    <button className="Postuler">Postuler</button>
+                                </div>
+
                             </li>
                         ))}
                     </ul>

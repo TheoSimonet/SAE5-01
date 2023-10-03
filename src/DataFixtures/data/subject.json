@@ -4,7 +4,7 @@
     "firstWeek": "2021-09-06",
     "lastWeek": "2021-12-17",
     "hoursTotal": 60,
-    "subjectCode": "MR205",
+    "subjectCode": "MR105",
     "semester": 1
   },
   {
@@ -12,7 +12,7 @@
     "firstWeek": "2021-05-03",
     "lastWeek": "2021-12-21",
     "hoursTotal": 40,
-    "subjectCode": "MR208",
+    "subjectCode": "MR308",
     "semester": 3
   },
   {
@@ -28,7 +28,7 @@
     "firstWeek": "2021-01-01",
     "lastWeek": "2021-10-08",
     "hoursTotal": 45,
-    "subjectCode": "MR210",
+    "subjectCode": "MR110",
     "semester": 1
   },
   {
@@ -44,7 +44,39 @@
     "firstWeek": "2021-07-09",
     "lastWeek": "2021-12-02",
     "hoursTotal": 42,
-    "subjectCode": "MR213",
+    "subjectCode": "MR313",
     "semester": 3
+  },
+  {
+    "name": "Symfony",
+    "firstWeek": "2021-09-05",
+    "lastWeek": "2021-12-16",
+    "hoursTotal": 55,
+    "subjectCode": "MR112",
+    "semester": 1
+  },
+  {
+    "name": "React",
+    "firstWeek": "2021-07-09",
+    "lastWeek": "2021-12-02",
+    "hoursTotal": 42,
+    "subjectCode": "MR113",
+    "semester": 1
+  },
+  {
+    "name": "TypeScript",
+    "firstWeek": "2021-09-05",
+    "lastWeek": "2021-12-16",
+    "hoursTotal": 55,
+    "subjectCode": "MR102",
+    "semester": 1
+  },
+  {
+    "name": "JS",
+    "firstWeek": "2021-07-09",
+    "lastWeek": "2021-12-02",
+    "hoursTotal": 42,
+    "subjectCode": "MR103",
+    "semester": 1
   }
 ]
