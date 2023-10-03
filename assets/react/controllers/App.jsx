@@ -10,9 +10,12 @@ import Group from "../components/GroupDetail";
 function App() {
     return (
         <div className="app">
-            <Me/>
             <Grouplist/>
             <Router>
+                <Route path="/">
+                    <Me/>
+                </Route>
+
                 <Route path="/">
                     <Repartition/>
                 </Route>
@@ -20,6 +23,7 @@ function App() {
                     <Semesterlist/>
                 </Route>
                 <Route path="/react/semesters/:id">
+                    <Semesterlist/>
                     <Semester/>
                 </Route>
                 <Route path="/react/groups/:id">
