@@ -18,7 +18,6 @@ function Semester() {
         <div>
             {semester === null ? 'Loading...' : (
                 <div>
-                    <h2>Matières:</h2>
                     <ul>
                         {semester.subject.map((subject) => (
                             <li key={subject['@id']} className="semester-li">
