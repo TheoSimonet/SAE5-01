@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assignment{% endblock %}
+
+{% block body %}
+    <h1>Liste des affectations</h1>
+    {% for assignment in assignments %}
+        <li>
+            Affectation {{ assignment.id }}
+            <a href="{{ path('app_assignment_delete', {'id': assignment.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette affectation ?')">Supprimer</a>
+        </li>
+    {% endfor %}
+{% endblock %}
