@@ -67,6 +67,10 @@ class Subject
     #[Groups(['get_Subject'])]
     private ?int $hoursTotal = null;
 
+    #[ORM\ManyToOne(inversedBy: 'subject')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Semester $semester = null;
+
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
     private Collection $weeks;
 
@@ -139,6 +143,18 @@ class Subject
     public function setHoursTotal(int $hoursTotal): static
     {
         $this->hoursTotal = $hoursTotal;
+
+        return $this;
+    }
+
+    public function getSemester(): ?Semester
+    {
+        return $this->semester;
+    }
+
+    public function setSemester(?Semester $semester): static
+    {
+        $this->semester = $semester;
 
         return $this;
     }
