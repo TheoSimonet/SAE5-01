@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Maths",
+    "firstWeek": "2021-09-06",
+    "lastWeek": "2021-12-17",
+    "hoursTotal": 60,
+    "subjectCode": "MR105",
+    "semester": 1
+  },
+  {
+    "name": "Anglais",
+    "firstWeek": "2021-05-03",
+    "lastWeek": "2021-12-21",
+    "hoursTotal": 40,
+    "subjectCode": "MR308",
+    "semester": 3
+  },
+  {
+    "name": "Communication",
+    "firstWeek": "2021-02-06",
+    "lastWeek": "2021-11-09",
+    "hoursTotal": 50,
+    "subjectCode": "MR209",
+    "semester": 2
+  },
+  {
+    "name": "PPP",
+    "firstWeek": "2021-01-01",
+    "lastWeek": "2021-10-08",
+    "hoursTotal": 45,
+    "subjectCode": "MR110",
+    "semester": 1
+  },
+  {
+    "name": "Gestion",
+    "firstWeek": "2021-09-05",
+    "lastWeek": "2021-12-16",
+    "hoursTotal": 55,
+    "subjectCode": "MR212",
+    "semester": 2
+  },
+  {
+    "name": "Eco",
+    "firstWeek": "2021-07-09",
+    "lastWeek": "2021-12-02",
+    "hoursTotal": 42,
+    "subjectCode": "MR313",
+    "semester": 3
+  },
+  {
+    "name": "Symfony",
+    "firstWeek": "2021-09-05",
+    "lastWeek": "2021-12-16",
+    "hoursTotal": 55,
+    "subjectCode": "MR112",
+    "semester": 1
+  },
+  {
+    "name": "React",
+    "firstWeek": "2021-07-09",
+    "lastWeek": "2021-12-02",
+    "hoursTotal": 42,
+    "subjectCode": "MR113",
+    "semester": 1
+  },
+  {
+    "name": "TypeScript",
+    "firstWeek": "2021-09-05",
+    "lastWeek": "2021-12-16",
+    "hoursTotal": 55,
+    "subjectCode": "MR102",
+    "semester": 1
+  },
+  {
+    "name": "JS",
+    "firstWeek": "2021-07-09",
+    "lastWeek": "2021-12-02",
+    "hoursTotal": 42,
+    "subjectCode": "MR103",
+    "semester": 1
+  }
+]

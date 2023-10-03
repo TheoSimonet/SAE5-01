@@ -9,6 +9,8 @@ function Semester() {
     useEffect(() => {
         getSemester(params.id).then((data) => {
             setSemester(data);
+
+
         });
     }, [params.id]);
 
@@ -16,9 +18,20 @@ function Semester() {
         <div>
             {semester === null ? 'Loading...' : (
                 <div>
-                    <h1>{semester.name}</h1>
-                    <p>Start Date: {semester.startDate}</p>
-                    <p>End Date: {semester.endDate}</p>
+                    <h2>Matières:</h2>
+                    <ul>
+                        {semester.subject.map((subject) => (
+                            <li key={subject['@id']} className="semester-li">
+                                {subject.subjectCode + ' - ' + subject.name}
+                                <br/><br/>
+                                <p className="groupe">Groupes |</p>
+                                <div className="Postuler-container">
+                                    <button className="Postuler">Postuler</button>
+                                </div>
+
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
         </div>

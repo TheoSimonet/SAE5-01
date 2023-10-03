@@ -48,24 +48,29 @@ class Subject
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?\DateTimeInterface $firstWeek = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?\DateTimeInterface $lastWeek = null;
 
     #[ORM\Column(length: 25)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $subjectCode = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $hoursTotal = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subject')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_User', 'set_User'])]
+    private ?Semester $semester = null;
 
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
     private Collection $weeks;
@@ -139,6 +144,18 @@ class Subject
     public function setHoursTotal(int $hoursTotal): static
     {
         $this->hoursTotal = $hoursTotal;
+
+        return $this;
+    }
+
+    public function getSemester(): ?Semester
+    {
+        return $this->semester;
+    }
+
+    public function setSemester(?Semester $semester): static
+    {
+        $this->semester = $semester;
 
         return $this;
     }

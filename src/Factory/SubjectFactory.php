@@ -52,6 +52,7 @@ final class SubjectFactory extends ModelFactory
             'lastWeek' => self::faker()->dateTime(),
             'name' => self::faker()->text(15),
             'subjectCode' => self::faker()->text(5),
+            'semester' => SemesterFactory::new(),
         ];
     }
 

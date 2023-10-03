@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\GetSubjectsController;
 use App\Repository\SemesterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SemesterRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Semester']],
+        ),
         new GetCollection(),
         new Post(
             security: "is_granted('ROLE_USER')"
@@ -58,9 +61,14 @@ class Semester
     #[ORM\ManyToMany(targetEntity: Period::class, mappedBy: 'Semester')]
     private Collection $periods;
 
+    #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class, orphanRemoval: true)]
+    #[Groups(['get_User', 'set_User', 'get_Semester'])]
+    private Collection $subject;
+
     public function __construct()
     {
         $this->periods = new ArrayCollection();
+        $this->subject = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +137,36 @@ class Semester
     {
         if ($this->periods->removeElement($period)) {
             $period->removeSemester($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subject>
+     */
+    public function getSubject(): Collection
+    {
+        return $this->subject;
+    }
+
+    public function addSubject(Subject $subject): static
+    {
+        if (!$this->subject->contains($subject)) {
+            $this->subject->add($subject);
+            $subject->setSemester($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): static
+    {
+        if ($this->subject->removeElement($subject)) {
+            // set the owning side to null (unless already changed)
+            if ($subject->getSemester() === $this) {
+                $subject->setSemester(null);
+            }
         }
 
         return $this;
