@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\SubjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -64,6 +66,14 @@ class Subject
     #[ORM\Column]
     #[Groups(['get_Subject'])]
     private ?int $hoursTotal = null;
+
+    #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
+    private Collection $weeks;
+
+    public function __construct()
+    {
+        $this->weeks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,6 +139,33 @@ class Subject
     public function setHoursTotal(int $hoursTotal): static
     {
         $this->hoursTotal = $hoursTotal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Week>
+     */
+    public function getWeeks(): Collection
+    {
+        return $this->weeks;
+    }
+
+    public function addWeek(Week $week): static
+    {
+        if (!$this->weeks->contains($week)) {
+            $this->weeks->add($week);
+            $week->addSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeek(Week $week): static
+    {
+        if ($this->weeks->removeElement($week)) {
+            $week->removeSubject($this);
+        }
 
         return $this;
     }
