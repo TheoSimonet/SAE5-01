@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
@@ -102,6 +102,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Groups(['get_User', 'set_User'])]
     private ?string $email = null;
+
+    #[ORM\Column]
+    #[Groups(['set_User', 'get_Me', 'get_User'])]
+    private ?int $minHours = null;
+
+    #[ORM\Column]
+    #[Groups(['set_User', 'get_Me', 'get_User'])]
+    private ?int $maxHours = null;
 
     public function getId(): ?int
     {
@@ -253,6 +261,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getMinHours(): ?int
+    {
+        return $this->minHours;
+    }
+
+    public function setMinHours(int $minHours): static
+    {
+        $this->minHours = $minHours;
+
+        return $this;
+    }
+
+    public function getMaxHours(): ?int
+    {
+        return $this->maxHours;
+    }
+
+    public function setMaxHours(int $maxHours): static
+    {
+        $this->maxHours = $maxHours;
 
         return $this;
     }
