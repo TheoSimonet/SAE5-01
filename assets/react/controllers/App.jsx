@@ -10,7 +10,6 @@ import Group from "../components/GroupDetail";
 function App() {
     return (
         <div className="app">
-            <Grouplist/>
             <Router>
                 <Route path="/">
                     <Me/>
@@ -25,9 +24,6 @@ function App() {
                 <Route path="/react/semesters/:id">
                     <Semesterlist/>
                     <Semester/>
-                </Route>
-                <Route path="/react/groups/:id">
-                    <Group/>
                 </Route>
             </Router>
         </div>
