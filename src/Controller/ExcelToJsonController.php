@@ -22,12 +22,29 @@ class ExcelToJsonController extends AbstractController
 
                 $allData = [];
 
-                foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                $worksheets = iterator_to_array($spreadsheet->getWorksheetIterator());
+                $lastWorksheet = end($worksheets);
+
+                foreach ($worksheets as $worksheet) {
                     $sheetName = $worksheet->getTitle();
                     $data = $worksheet->toArray();
 
                     if ($data) {
-                        $allData[$sheetName] = $data;
+                        if ($worksheet !== $lastWorksheet) {
+                            for ($i = 1; $i < count($data); $i++) {
+                                if (!empty($data[$i][4])){
+                                    if (empty($data[$i][1])) {
+                                        $data[$i][1] = $data[$i-1][1];
+                                    }
+
+                                    if (empty($data[$i][2])) {
+                                        $data[$i][2] = $data[$i-1][2];
+                                    }
+                                }
+                            }
+
+                            $allData[$sheetName] = $data;
+                        }
                     } else {
                         $this->addFlash('error', 'No data found in sheet: ' . $sheetName);
                     }
@@ -41,4 +58,7 @@ class ExcelToJsonController extends AbstractController
             'data' => $allData ?? null,
         ]);
     }
+
+
+
 }
