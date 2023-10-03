@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\GetSubjectsController;
 use App\Repository\SemesterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SemesterRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Semester']],
+        ),
         new GetCollection(),
         new Post(
             security: "is_granted('ROLE_USER')"
@@ -59,7 +62,7 @@ class Semester
     private Collection $periods;
 
     #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class, orphanRemoval: true)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_Semester'])]
     private Collection $subject;
 
     public function __construct()
