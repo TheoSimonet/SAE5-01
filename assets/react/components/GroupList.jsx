@@ -1,31 +1,32 @@
-import React, {useState, useEffect} from 'react';
-import {fetchGroups} from '../services/api';
-import {Link} from 'wouter';
-import "../../styles/semesterList.css"
+import React, { useState, useEffect } from 'react';
+import { fetchGroups } from '../services/api';
+import {Link} from "wouter";
+
 function Grouplist() {
-    const [groups, setGroups] = useState(null);
+    const [groups, setGroups] = useState([]);
 
     useEffect(() => {
         fetchGroups().then((data) => {
-            if (data && data["hydra:member"]) {
-                setGroups(data["hydra:member"]);
+            if (data && data.length > 0) {
+                setGroups(data);
             }
         });
     }, []);
 
     return (
-        <div className={"subjectList"}>
-            {groups ===null ? 'ça charge ou quoi ?!' :
-                groups.map((group) => (
-                        <div key={group.id}>
-                            <Link href={`/react/subjects/${group.id}`}>
-                                {group.lib}
+        <div className={"semesterList"}>
+            {groups ===null ? 'Loading...' :
+            groups.map((group) => (
+                        <div key={group.type}>
+                            <Link href={`/react/groups/${group.id}`}>
+                                {group.type}
                             </Link>
                         </div>
                     )
                 )
             }
         </div>
+
     );
 }
 

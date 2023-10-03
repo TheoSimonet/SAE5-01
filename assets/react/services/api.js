@@ -12,13 +12,8 @@ export function getSemester(id) {
     );
 }
 export function fetchGroups() {
-    return fetch(`${BASE_URL}/groups`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(groupData),
-    }).then((response) => (response.ok ? response.json() : Promise.resolve(null)));
+    return fetch(`${BASE_URL}/groups`)
+        .then((response) => (response.ok ? response.json() : Promise.resolve(null)));
 }
 
 export function getGroup(id) {
