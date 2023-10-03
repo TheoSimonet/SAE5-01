@@ -55,6 +55,8 @@ final class UserFactory extends ModelFactory
             'login' => self::faker()->userName,
             'password' => 'test',
             'phone' => self::faker()->phoneNumber,
+            'minHours' => random_int(0, 35),
+            'maxHours' => random_int(0, 35) ,
             'postalCode' => self::faker()->postcode,
         ];
     }
