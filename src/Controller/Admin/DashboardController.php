@@ -8,6 +8,7 @@ use App\Entity\Period;
 use App\Entity\Semester;
 use App\Entity\Subject;
 use App\Entity\User;
+use App\Entity\Week;
 use App\Entity\Wish;
 use App\Entity\Year;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -41,6 +42,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Matieres', 'fas fa-book', Subject::class);
         yield MenuItem::linkToCrud('Voeux', 'fas fa-pencil', Wish::class);
         yield MenuItem::linkToCrud('Années', 'fas fa-hourglass-start', Year::class);
-
+        yield MenuItem::linkToCrud('Semaines', 'fas fa-calendar', Week::class);
     }
 }
