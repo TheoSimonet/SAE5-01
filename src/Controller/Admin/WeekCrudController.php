@@ -28,8 +28,8 @@ class WeekCrudController extends AbstractCrudController
         return [
             IdField::new('id')
                 ->hideOnForm(),
-            IntegerField::new('numberHours'),
             IntegerField::new('weekNumber'),
+            IntegerField::new('numberHours'),
             CollectionField::new('Subject')
                 ->hideOnIndex(),
         ];
