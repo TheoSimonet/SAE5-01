@@ -8,6 +8,7 @@ use App\Entity\Period;
 use App\Entity\Semester;
 use App\Entity\Subject;
 use App\Entity\User;
+use App\Entity\Wish;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -37,6 +38,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Groupes', 'fas fa-users', Group::class);
         yield MenuItem::linkToCrud('Periodes', 'fa fa-clock-o', Period::class);
         yield MenuItem::linkToCrud('Matieres', 'fas fa-book', Subject::class);
+        yield MenuItem::linkToCrud('Voeux', 'fas fa-pencil', Wish::class);
 
 
     }
