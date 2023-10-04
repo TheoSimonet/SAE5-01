@@ -3,13 +3,47 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\NbGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NbGroupRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(
+            normalizationContext: ['groups' => ['get_NbGroup']],
+            denormalizationContext: ['groups' => ['set_NbGroup']],
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Put(
+            normalizationContext: ['groups' => ['get_NbGroup']],
+            denormalizationContext: ['groups' => ['set_NbGroup']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['get_NbGroup']],
+            denormalizationContext: ['groups' => ['set_NbGroup']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+    ]
+)]
+#[ORM\Table(name: 'nbGroups')]
 class NbGroup
 {
     #[ORM\Id]
