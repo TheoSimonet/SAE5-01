@@ -12,23 +12,27 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\WishRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Wish']],
+        ),
         new GetCollection(),
         new Post(
             security: "is_granted('ROLE_USER')"
         ),
         new Patch(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            normalizationContext: ['groups' => ['get_Wish', 'set_Wish']],
+            security: "is_granted('ROLE_USER')"
         ),
         new Put(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            security: "is_granted('ROLE_USER')"
         ),
         new Delete(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            security: "is_granted('ROLE_USER')"
         ),
     ]
 )]
@@ -39,7 +43,12 @@ class Wish
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_Wish', 'set_Wish'])]
     private ?int $id = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['get_Wish','set_Wish'])]
+    private ?int $chosenGroups = null;
 
     public function getId(): ?int
     {
@@ -52,4 +61,17 @@ class Wish
 
         return $this;
     }
+
+    public function getChosenGroups(): ?int
+    {
+        return $this->chosenGroups;
+    }
+
+    public function setChosenGroups(?int $chosenGroups): static
+    {
+        $this->chosenGroups = $chosenGroups;
+
+        return $this;
+    }
+
 }

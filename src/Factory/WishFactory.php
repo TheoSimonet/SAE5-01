@@ -47,6 +47,7 @@ final class WishFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
+            'chosenGroups' => random_int(0, 6),
         ];
     }
 
