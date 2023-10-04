@@ -56,7 +56,7 @@ class Subject
     #[Groups(['get_Subject'])]
     private ?int $lastWeek = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 40)]
     #[Groups(['get_Subject'])]
     private ?string $subjectCode = null;
 
