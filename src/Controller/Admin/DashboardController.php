@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Assignment;
 use App\Entity\Group;
+use App\Entity\Period;
 use App\Entity\Semester;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -33,6 +34,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Affectations', 'fas fa-check-circle', Assignment::class);
         yield MenuItem::linkToCrud('Groupes', 'fas fa-users', Group::class);
+        yield MenuItem::linkToCrud('Periodes', 'fa fa-clock-o', Period::class);
 
 
     }
