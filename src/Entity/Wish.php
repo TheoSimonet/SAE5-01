@@ -53,6 +53,9 @@ class Wish
     #[ORM\ManyToOne(inversedBy: 'wishes')]
     private ?Group $groupeType = null;
 
+    #[ORM\ManyToOne(inversedBy: 'wishes')]
+    private ?Subject $subjectId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +88,18 @@ class Wish
     public function setGroupeType(?Group $groupeType): static
     {
         $this->groupeType = $groupeType;
+
+        return $this;
+    }
+
+    public function getSubjectId(): ?Subject
+    {
+        return $this->subjectId;
+    }
+
+    public function setSubjectId(?Subject $subjectId): static
+    {
+        $this->subjectId = $subjectId;
 
         return $this;
     }

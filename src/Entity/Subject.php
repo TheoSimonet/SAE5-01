@@ -75,9 +75,13 @@ class Subject
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
     private Collection $weeks;
 
+    #[ORM\OneToMany(mappedBy: 'subjectId', targetEntity: Wish::class)]
+    private Collection $wishes;
+
     public function __construct()
     {
         $this->weeks = new ArrayCollection();
+        $this->wishes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,6 +186,36 @@ class Subject
     {
         if ($this->weeks->removeElement($week)) {
             $week->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wish>
+     */
+    public function getWishes(): Collection
+    {
+        return $this->wishes;
+    }
+
+    public function addWish(Wish $wish): static
+    {
+        if (!$this->wishes->contains($wish)) {
+            $this->wishes->add($wish);
+            $wish->setSubjectId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWish(Wish $wish): static
+    {
+        if ($this->wishes->removeElement($wish)) {
+            // set the owning side to null (unless already changed)
+            if ($wish->getSubjectId() === $this) {
+                $wish->setSubjectId(null);
+            }
         }
 
         return $this;
