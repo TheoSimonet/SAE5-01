@@ -29,6 +29,12 @@ class SubjectController extends AbstractController
                 $spreadsheet = IOFactory::load($file->getPathname());
                 $entityManager = $this->registry->getManagerForClass(Subject::class);
 
+                $subjectRepository = $entityManager->getRepository(Subject::class);
+                $subjectRepository->createQueryBuilder('s')
+                    ->delete()
+                    ->getQuery()
+                    ->execute();
+
                 $allData = [];
 
                 $worksheets = iterator_to_array($spreadsheet->getWorksheetIterator());
@@ -37,7 +43,7 @@ class SubjectController extends AbstractController
                 foreach ($worksheets as $worksheet) {
                     $sheetName = $worksheet->getTitle();
 
-                    if ($sheetName === 'Histogramme') {
+                    if ('Histogramme' === $sheetName) {
                         continue;
                     }
 
@@ -75,7 +81,7 @@ class SubjectController extends AbstractController
                             }
                         }
                         foreach ($data as $row) {
-                            if (empty($row[4]) || str_starts_with($row[1], 'BUT'))  {
+                            if (empty($row[4]) || str_starts_with($row[1], 'BUT')) {
                                 continue;
                             }
                             $subject = new Subject();
