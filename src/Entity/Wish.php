@@ -50,6 +50,9 @@ class Wish
     #[Groups(['get_Wish','set_Wish'])]
     private ?int $chosenGroups = null;
 
+    #[ORM\ManyToOne(inversedBy: 'wishes')]
+    private ?Group $groupeType = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +73,18 @@ class Wish
     public function setChosenGroups(?int $chosenGroups): static
     {
         $this->chosenGroups = $chosenGroups;
+
+        return $this;
+    }
+
+    public function getGroupeType(): ?Group
+    {
+        return $this->groupeType;
+    }
+
+    public function setGroupeType(?Group $groupeType): static
+    {
+        $this->groupeType = $groupeType;
 
         return $this;
     }
