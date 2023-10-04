@@ -6,6 +6,7 @@ import Semester from "../components/SemesterDetail";
 import  Me from "../components/Me";
 import  Repartition from "../components/Repartition";
 import Group from "../components/GroupDetail";
+import SemesterDetail from "../components/SemesterDetail";
 
 function App() {
     return (

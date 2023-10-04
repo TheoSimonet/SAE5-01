@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {getSemester} from '../services/api';
-import {useRoute} from 'wouter';
+import {Link, useRoute} from 'wouter';
 import Modal from 'react-modal';
 
 function Semester() {
@@ -26,9 +26,8 @@ function Semester() {
                                 <br/><br/>
                                 <p className="groupe">Groupes |</p>
                                 <div className="Postuler-container">
-                                    <button className="Postuler">Postuler</button>
+                                    <a href="/wish/new" className="ajouter-button">Postuler</a>
                                 </div>
-
                             </li>
                         ))}
                     </ul>
