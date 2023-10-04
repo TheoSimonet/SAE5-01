@@ -31,10 +31,6 @@
     color: white;
 }
 
-ul{
-    overflow-y: auto;
-    max-height: 750px;
-}
 .semester-li {
     border: 3px solid black;
     border-radius: 10px;
@@ -89,3 +85,4 @@ h2 {
         height: 20%;
     }
 }
+
