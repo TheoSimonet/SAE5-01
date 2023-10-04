@@ -37,7 +37,6 @@ class ExcelToJsonController extends AbstractController
                 foreach ($worksheets as $worksheet) {
                     $sheetName = $worksheet->getTitle();
 
-                    // Check if sheet name is "Histogramme", and skip it if true
                     if ($sheetName === 'Histogramme') {
                         continue;
                     }
@@ -76,11 +75,12 @@ class ExcelToJsonController extends AbstractController
                             }
                         }
                         foreach ($data as $row) {
+                            if (empty($row[4]) || str_starts_with($row[1], 'BUT'))  {
+                                continue;
+                            }
                             $subject = new Subject();
 
-                            // Check if subjectCode is empty
-                            if (empty($row[1])) {
-                                // Iterate backwards to find the first non-empty subjectCode above
+                            if (empty($row[1]) && !empty($row[3])) {
                                 for ($i = count($allData[$sheetName]) - 1; $i >= 0; --$i) {
                                     if (!empty($allData[$sheetName][$i][1])) {
                                         $subjectCode = $allData[$sheetName][$i][1];
@@ -88,15 +88,12 @@ class ExcelToJsonController extends AbstractController
                                     }
                                 }
 
-                                // Set subjectCode to the value from above (or null if not found)
                                 $subject->setSubjectCode($subjectCode ?? null);
                             } else {
                                 $subject->setSubjectCode($row[1]);
                             }
 
-                            // Check if name is empty
                             if (empty($row[2])) {
-                                // Iterate backwards to find the first non-empty name above
                                 for ($i = count($allData[$sheetName]) - 1; $i >= 0; --$i) {
                                     if (!empty($allData[$sheetName][$i][2])) {
                                         $name = $allData[$sheetName][$i][2];
@@ -104,13 +101,12 @@ class ExcelToJsonController extends AbstractController
                                     }
                                 }
 
-                                // Set name to the value from above (or null if not found)
                                 $subject->setName($name ?? null);
                             } else {
                                 $subject->setName($row[2]);
                             }
 
-                            $hourstotal = (int) $row[6];
+                            $hourstotal = (int) $row[5];
                             $subject->setHoursTotal($hourstotal);
                             $subject->setFirstWeek($firstWeek);
                             $subject->setLastWeek($lastWeek);
