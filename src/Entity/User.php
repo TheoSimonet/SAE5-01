@@ -7,7 +7,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\GetMeController;
 use App\Repository\UserRepository;
@@ -49,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Delete(
             security: "is_granted('ROLE_USER') and object == user"
-        )
+        ),
     ],
     normalizationContext: ['groups' => ['get_User', 'get_Me']]
 )]
@@ -66,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $login = null;
 
     #[ORM\Column]
-    private array $roles = ["ROLE_USER"];
+    private array $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
