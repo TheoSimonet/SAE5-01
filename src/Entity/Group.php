@@ -9,8 +9,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Repository\GroupRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -19,9 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         new Post(
-            normalizationContext: ['groups' => ['get_Group']],
-            denormalizationContext: ['groups' => ['set_Group']],
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
         ),
         new Put(
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
@@ -70,6 +66,10 @@ class Group
         $this->wishes = new ArrayCollection();
     }
 
+    #[ORM\ManyToOne(inversedBy: 'groups')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Subject $subject = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -97,36 +97,6 @@ class Group
     public function setType(string $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Wish>
-     */
-    public function getWishes(): Collection
-    {
-        return $this->wishes;
-    }
-
-    public function addWish(Wish $wish): static
-    {
-        if (!$this->wishes->contains($wish)) {
-            $this->wishes->add($wish);
-            $wish->setGroupeType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWish(Wish $wish): static
-    {
-        if ($this->wishes->removeElement($wish)) {
-            // set the owning side to null (unless already changed)
-            if ($wish->getGroupeType() === $this) {
-                $wish->setGroupeType(null);
-            }
-        }
 
         return $this;
     }
