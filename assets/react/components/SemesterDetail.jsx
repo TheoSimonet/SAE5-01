@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {getSemester} from '../services/api';
-import {useRoute} from 'wouter';
+import React, { useState, useEffect } from 'react';
+import { getSemester } from '../services/api';
+import { useRoute } from 'wouter';
 
 function Semester() {
     const [semester, setSemester] = useState(null);
@@ -9,8 +9,6 @@ function Semester() {
     useEffect(() => {
         getSemester(params.id).then((data) => {
             setSemester(data);
-
-
         });
     }, [params.id]);
 
@@ -19,17 +17,20 @@ function Semester() {
             {semester === null ? 'Loading...' : (
                 <div>
                     <ul>
-                        {semester.subject.map((subject) => (
-                            <li key={subject['@id']} className="semester-li">
-                                {subject.subjectCode + ' - ' + subject.name}
-                                <br/><br/>
-                                <p className="groupe">Groupes |</p>
-                                <div className="Postuler-container">
-                                    <button className="Postuler">Postuler</button>
-                                </div>
+                        {semester.subject.map((subject) => {
+                            const subjectId = subject['@id'].split('/').pop();
 
-                            </li>
-                        ))}
+                            return (
+                                <li key={subjectId} className="semester-li">
+                                    {subject.subjectCode + ' - ' + subject.name}
+                                    <br/><br/>
+                                    <p className="groupe">Groupes |</p>
+                                    <div className="Postuler-container">
+                                        <a href={`/wish/new?subjectId=${subjectId}`} className="ajouter-button">Postuler</a>
+                                    </div>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             )}

@@ -20,7 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Subject','get_Wish']],
+        ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
@@ -44,11 +46,11 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'getWish'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'getWish'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -75,9 +77,13 @@ class Subject
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
     private Collection $weeks;
 
+    #[ORM\OneToMany(mappedBy: 'subjectId', targetEntity: Wish::class)]
+    private Collection $wishes;
+
     public function __construct()
     {
         $this->weeks = new ArrayCollection();
+        $this->wishes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,6 +188,36 @@ class Subject
     {
         if ($this->weeks->removeElement($week)) {
             $week->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wish>
+     */
+    public function getWishes(): Collection
+    {
+        return $this->wishes;
+    }
+
+    public function addWish(Wish $wish): static
+    {
+        if (!$this->wishes->contains($wish)) {
+            $this->wishes->add($wish);
+            $wish->setSubjectId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWish(Wish $wish): static
+    {
+        if ($this->wishes->removeElement($wish)) {
+            // set the owning side to null (unless already changed)
+            if ($wish->getSubjectId() === $this) {
+                $wish->setSubjectId(null);
+            }
         }
 
         return $this;

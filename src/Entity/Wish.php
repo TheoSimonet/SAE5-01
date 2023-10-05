@@ -12,23 +12,28 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\WishRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Wish']],
+        ),
         new GetCollection(),
         new Post(
             security: "is_granted('ROLE_USER')"
         ),
         new Patch(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            normalizationContext: ['groups' => ['get_Wish', 'set_Wish']],
+            security: "is_granted('ROLE_USER')"
         ),
         new Put(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            security: "is_granted('ROLE_USER')"
         ),
         new Delete(
-            security: "is_granted('ROLE_USER') and object.getUser() == user"
+            security: "is_granted('ROLE_USER')"
         ),
     ]
 )]
@@ -39,7 +44,20 @@ class Wish
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_Wish', 'set_Wish'])]
     private ?int $id = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['get_Wish','set_Wish'])]
+    private ?int $chosenGroups = null;
+
+    #[ORM\ManyToOne(inversedBy: 'wishes')]
+    #[Groups(['get_User', 'set_User'])]
+    private ?Group $groupeType = null;
+
+    #[ORM\ManyToOne(inversedBy: 'wishes')]
+    #[Groups(['get_User', 'set_User'])]
+    private ?Subject $subjectId = null;
 
     public function getId(): ?int
     {
@@ -52,4 +70,41 @@ class Wish
 
         return $this;
     }
+
+    public function getChosenGroups(): ?int
+    {
+        return $this->chosenGroups;
+    }
+
+    public function setChosenGroups(?int $chosenGroups): static
+    {
+        $this->chosenGroups = $chosenGroups;
+
+        return $this;
+    }
+
+    public function getGroupeType(): ?Group
+    {
+        return $this->groupeType;
+    }
+
+    public function setGroupeType(?Group $groupeType): static
+    {
+        $this->groupeType = $groupeType;
+
+        return $this;
+    }
+
+    public function getSubjectId(): ?Subject
+    {
+        return $this->subjectId;
+    }
+
+    public function setSubjectId(?Subject $subjectId): static
+    {
+        $this->subjectId = $subjectId;
+
+        return $this;
+    }
+
 }

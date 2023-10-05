@@ -4,27 +4,28 @@
 
 {% block body %}
     <div class="container">
+
         <h1 class="mt-4">Création d'un voeu</h1>
 
-    {#  {{ form_start(form) }}
+        {{ form_start(form) }}
 
         <div class="form-group">
-            {{ form_label(form.endDate) }}
-            {{ form_widget(form.endDate) }}
+            {{ form_label(form.chosenGroups) }}
+            {{ form_widget(form.chosenGroups) }}
             <div class="form-error">
-                {{ form_errors(form.endDate) }}
+                {{ form_errors(form.chosenGroups) }}
             </div>
         </div>
 
-
         <div class="form-group">
-            {{ form_label(form.year) }}
-            {{ form_widget(form.year) }}
+            {{ form_label(form.groupeType) }}
+            {{ form_widget(form.groupeType) }}
             <div class="form-error">
-                {{ form_errors(form.year) }}
+                {{ form_errors(form.groupeType) }}
             </div>
         </div>
-        {{ form_end(form) }} #}
 
+        {{ form_end(form) }}
     </div>
+
 {% endblock %}
