@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Subject;
 use App\Entity\Wish;
 use App\Form\WishType;
 use App\Repository\WishRepository;
@@ -28,12 +29,21 @@ class WishController extends AbstractController
     #[Route('/wish/new', name: 'app_wish_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
-        $wish = new Wish();
-        $form = $this->createForm(WishType::class, $wish);
-
+        $form = $this->createForm(WishType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $wish = $form->getData();
+            $subjectId = $request->query->get('subjectId');
+
+            if ($subjectId !== null) {
+                // Utilisez l'EntityManager pour charger l'entité Subject
+                $subject = $manager->getRepository(Subject::class)->find($subjectId);
+
+                if ($subject !== null) {
+                    $wish->setSubjectId($subject);
+                }
+            }
 
             $manager->persist($wish);
             $manager->flush();
