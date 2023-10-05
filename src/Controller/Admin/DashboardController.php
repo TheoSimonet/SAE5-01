@@ -33,15 +33,15 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Accueil', 'fa fa-home');
+        yield MenuItem::linkToCrud('Affectations', 'fas fa-check-circle', Assignment::class);
+        yield MenuItem::linkToCrud('Années', 'fas fa-hourglass-start', Year::class);
+        yield MenuItem::linkToCrud('Groupes', 'fas fa-users', Group::class);
+        yield MenuItem::linkToCrud('Matières', 'fas fa-book', Subject::class);
+        yield MenuItem::linkToCrud('Periodes', 'fa fa-clock-o', Period::class);
+        yield MenuItem::linkToCrud('Semaines', 'fas fa-calendar', Week::class);
         yield MenuItem::linkToCrud('Semestres', 'fas fa-list', Semester::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
-        yield MenuItem::linkToCrud('Affectations', 'fas fa-check-circle', Assignment::class);
-        yield MenuItem::linkToCrud('Groupes', 'fas fa-users', Group::class);
-        yield MenuItem::linkToCrud('Periodes', 'fa fa-clock-o', Period::class);
-        yield MenuItem::linkToCrud('Matieres', 'fas fa-book', Subject::class);
         yield MenuItem::linkToCrud('Voeux', 'fas fa-pencil', Wish::class);
-        yield MenuItem::linkToCrud('Années', 'fas fa-hourglass-start', Year::class);
-        yield MenuItem::linkToCrud('Semaines', 'fas fa-calendar', Week::class);
     }
 }

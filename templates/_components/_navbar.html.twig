@@ -10,6 +10,9 @@
 
         <nav class="navbar">
             <a href="/">Accueil</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin') }}">Admin</a>
+            {% endif %}
             <a href="#">Historique</a>
             <a href="{{ path('app_user_show')}}">Profil</a>
             <a href="/logout">Déconnexion</a>
