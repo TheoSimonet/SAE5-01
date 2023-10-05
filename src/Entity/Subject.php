@@ -20,7 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['get_Subject','get_Wish']],
+        ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
@@ -44,11 +46,11 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'getWish'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'getWish'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

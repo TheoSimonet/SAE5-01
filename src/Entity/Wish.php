@@ -13,6 +13,7 @@ use App\Repository\WishRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 #[ApiResource(
@@ -51,9 +52,11 @@ class Wish
     private ?int $chosenGroups = null;
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
+    #[Groups(['get_User', 'set_User'])]
     private ?Group $groupeType = null;
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
+    #[Groups(['get_User', 'set_User'])]
     private ?Subject $subjectId = null;
 
     public function getId(): ?int
