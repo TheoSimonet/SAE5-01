@@ -10,12 +10,11 @@ class GroupFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $libs = [['travaux pratiques', 'TP'], ['travaux dirigés', 'TD'], ['cours magistraux', 'CM']];
+        $libs = [['TP'], ['TD'],['CM']];
 
         foreach ($libs as $lib) {
             $group = new Group();
-            $group->setLib($lib[0]);
-            $group->setType($lib[1]);
+            $group->setType($lib[0]);
 
             $manager->persist($group);
         }
