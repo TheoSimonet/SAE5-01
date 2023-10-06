@@ -107,11 +107,22 @@ class Group
     public function removeWish(Wish $wish): static
     {
         if ($this->wishes->removeElement($wish)) {
-            // set the owning side to null (unless already changed)
             if ($wish->getGroupeType() === $this) {
                 $wish->setGroupeType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSubject(): ?Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?Subject $subject): static
+    {
+        $this->subject = $subject;
 
         return $this;
     }
