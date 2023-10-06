@@ -10,9 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\WishRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
@@ -37,8 +35,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
     ]
 )]
-
-
 class Wish
 {
     #[ORM\Id]
@@ -48,7 +44,7 @@ class Wish
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['get_Wish','set_Wish'])]
+    #[Groups(['get_Wish', 'set_Wish'])]
     private ?int $chosenGroups = null;
 
     #[ORM\ManyToOne(inversedBy: 'wishes')]
@@ -106,5 +102,4 @@ class Wish
 
         return $this;
     }
-
 }

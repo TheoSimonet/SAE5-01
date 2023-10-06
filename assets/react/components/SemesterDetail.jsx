@@ -1,5 +1,7 @@
+// src/components/Semester.js
 import React, { useState, useEffect } from 'react';
 import { getSemester } from '../services/api';
+import WishForm from './wishForm';
 import { useRoute } from 'wouter';
 
 function Semester() {
@@ -26,7 +28,8 @@ function Semester() {
                                     <br/><br/>
                                     <p className="groupe">Groupes |</p>
                                     <div className="Postuler-container">
-                                        <a href={`/wish/new?subjectId=${subjectId}`} className="ajouter-button">Postuler</a>
+                                        {/* Incluez le formulaire WishForm ici */}
+                                        <WishForm subjectId={subjectId} />
                                     </div>
                                 </li>
                             );

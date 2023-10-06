@@ -22,6 +22,47 @@ export function getGroup(id) {
     );
 }
 
+export function postWish(subjectId, formData) {
+    const url = `${BASE_URL}/wishes`;
+
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la soumission du voeu');
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function fetchGroupTypes() {
+    return fetch(`${BASE_URL}/groups`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('La récupération des types de groupe a échoué');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (Array.isArray(data)) {
+                return data.map((item) => item.type);
+            } else {
+                throw new Error('Les données des types de groupe ne sont pas au format attendu');
+            }
+        })
+        .catch((error) => {
+            console.error('Erreur lors de la récupération des types de groupe :', error);
+            throw error;
+        });
+}
 
 
 
