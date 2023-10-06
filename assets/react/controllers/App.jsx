@@ -7,6 +7,7 @@ import  Me from "../components/Me";
 import  Repartition from "../components/Repartition";
 import Group from "../components/GroupDetail";
 import SemesterDetail from "../components/SemesterDetail";
+import AdminRead from "../components/AdminRead";
 
 function App() {
     return (
@@ -15,7 +16,6 @@ function App() {
                 <Route path="/">
                     <Me/>
                 </Route>
-
                 <Route path="/">
                     <Repartition/>
                 </Route>
@@ -25,6 +25,10 @@ function App() {
                 <Route path="/react/semesters/:id">
                     <Semesterlist/>
                     <Semester/>
+                </Route>
+                <Route path="/react/semesters/admin/:id">
+                    <Semesterlist/>
+                    <AdminRead/>
                 </Route>
             </Router>
         </div>

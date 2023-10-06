@@ -25,4 +25,11 @@ class HomeController extends AbstractController
         return $this->render('home/react.html.twig');
     }
 
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/react/semesters/admin/{id}', name: 'app_react_semester_admin', requirements: ['id' => '\d+'])]
+    public function reactAdmin(): Response
+    {
+        return $this->render('home/react.html.twig');
+    }
+
 }
