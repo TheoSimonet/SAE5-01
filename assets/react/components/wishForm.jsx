@@ -27,7 +27,17 @@ function WishForm({ subjectId }) {
         setLoading(true);
 
         try {
-            await postWish(subjectId, { chosenGroups, groupeType });
+            // Récupérer l'ID correspondant à l'index de l'option sélectionnée
+            const selectedTypeIndex = groupTypes.findIndex((type) => type === groupeType);
+
+            if (selectedTypeIndex !== -1) {
+                // Si l'index est trouvé, utilisez-le comme ID
+                const selectedTypeId = `/api/groups/${selectedTypeIndex + 1}`; // Ajoutez "/api/groups/" + ID
+                await postWish({ chosenGroups, groupeType: selectedTypeId });
+            } else {
+                console.error('Type de groupe non trouvé :', groupeType);
+            }
+
             setChosenGroups('');
             setGroupeType('');
         } catch (error) {
@@ -55,6 +65,7 @@ function WishForm({ subjectId }) {
                     </option>
                 ))}
             </select>
+
             <button type="submit" disabled={loading}>
                 {loading ? 'Envoi en cours...' : 'Créer un voeu'}
             </button>
