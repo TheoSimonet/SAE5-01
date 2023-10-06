@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
 use App\Entity\Subject;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -84,6 +85,7 @@ class SubjectController extends AbstractController
                             if (empty($row[4]) || str_starts_with($row[1], 'BUT')) {
                                 continue;
                             }
+
                             $subject = new Subject();
 
                             if (empty($row[1]) && !empty($row[3])) {
@@ -117,6 +119,21 @@ class SubjectController extends AbstractController
                             $subject->setFirstWeek($firstWeek);
                             $subject->setLastWeek($lastWeek);
                             $entityManager->persist($subject);
+
+                            $group = new Group();
+                            $group->setType($row[4]);
+
+
+                            $subjectRepository = $entityManager->getRepository(Subject::class);
+                            $subject = $subjectRepository->findOneBy(['subjectCode' => $row[4]]);
+
+                            if ($subject) {
+                                $group->setSubject($subject);
+                                $subject->addGroup($group);
+                                $entityManager->persist($group);
+                            } else {
+                                $this->addFlash('error', 'No subject found for group: '.$row[4]);
+                            }
                         }
                     } else {
                         $this->addFlash('error', 'No data found in sheet: '.$sheetName);
