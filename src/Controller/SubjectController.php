@@ -119,20 +119,29 @@ class SubjectController extends AbstractController
                             $subject->setFirstWeek($firstWeek);
                             $subject->setLastWeek($lastWeek);
                             $entityManager->persist($subject);
+                            $entityManager->flush();
+
+                            $subjectCode = $row[4];
 
                             $group = new Group();
-                            $group->setType($row[4]);
+                            $group->setType($subjectCode);
 
-
-                            $subjectRepository = $entityManager->getRepository(Subject::class);
-                            $subject = $subjectRepository->findOneBy(['subjectCode' => $row[4]]);
+                            $subject = $entityManager->getRepository(Subject::class)->findOneBy(['subjectCode' => $subjectCode]);
 
                             if ($subject) {
                                 $group->setSubject($subject);
                                 $subject->addGroup($group);
                                 $entityManager->persist($group);
+                                $entityManager->flush();
                             } else {
-                                $this->addFlash('error', 'No subject found for group: '.$row[4]);
+                                $this->addFlash('error', 'No subject found for group: '.$subjectCode);
+                            }
+                            if ($subject) {
+                                dump('Subject ID: '.$subject->getId());
+                                dump('Group Type: '.$group->getType());
+                                dump('Subject: ', $group->getSubject());
+                            } else {
+                                dump('Subject is null');
                             }
                         }
                     } else {
