@@ -36,11 +36,11 @@ class WishController extends AbstractController
             $wish = $form->getData();
             $subjectId = $request->query->get('subjectId');
 
-            if ($subjectId !== null) {
+            if (null !== $subjectId) {
                 // Utilisez l'EntityManager pour charger l'entité Subject
                 $subject = $manager->getRepository(Subject::class)->find($subjectId);
 
-                if ($subject !== null) {
+                if (null !== $subject) {
                     $wish->setSubjectId($subject);
                 }
             }
@@ -77,7 +77,7 @@ class WishController extends AbstractController
     {
         $manager->remove($wish);
         $manager->flush();
+
         return $this->redirectToRoute('app_wish');
     }
-
 }
