@@ -5,6 +5,8 @@ import Grouplist from "../components/GroupList";
 import Semester from "../components/SemesterDetail";
 import  Me from "../components/Me";
 import  Repartition from "../components/Repartition";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Group from "../components/GroupDetail";
 import SemesterDetail from "../components/SemesterDetail";
 
@@ -25,6 +27,7 @@ function App() {
                 <Route path="/react/semesters/:id">
                     <Semesterlist/>
                     <Semester/>
+                    <ToastContainer/>
                 </Route>
             </Router>
         </div>

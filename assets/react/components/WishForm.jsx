@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getMe, fetchGroups } from '../services/api';
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function WishForm({ subjectId }) {
     const [chosenGroups, setChosenGroups] = useState('');
@@ -24,13 +26,13 @@ function WishForm({ subjectId }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const selectedGroup = groupeTypes.find((group) => group.id === groupeType); // Utilisez l'ID du groupe
+        const selectedGroup = groupeTypes.find((group) => group.id === groupeType);
         const groupId = selectedGroup ? selectedGroup.id : '';
 
         const formData = {
             chosenGroups,
             subjectId,
-            groupeType
+            groupeType,
         };
 
         fetch('/api/wishes', {
@@ -45,17 +47,25 @@ function WishForm({ subjectId }) {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log("ChosenGroups: ", chosenGroups);
-                    console.log("GroupeType: ", groupeType);
-                    console.log("SubjectId: ", subjectId);
                     throw new Error('Erreur de requête');
                 }
             })
             .then(data => {
-                // Traitez la réponse réussie ici (si applicable)
+                toast.success('Vœu ajouté avec succès!', {
+                    position: 'top-left',
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    theme: 'colored',
+                });
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite :', error);
+                toast.error('Erreur lors de l\'ajout du vœu', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    closeOnClick: true,
+                    theme: 'colored',
+                });
             });
     };
 
@@ -75,7 +85,7 @@ function WishForm({ subjectId }) {
             </div>
 
             <div className="form-group">
-                <label htmlFor="groupeType">Groupe Type</label>
+                <label htmlFor="groupeType">Type de groupe</label>
                 <select
                     id="groupeType"
                     name="groupeType"
