@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use App\Controller\GetMeController;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -109,6 +111,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(['set_User', 'get_Me', 'get_User'])]
     private ?int $maxHours = null;
+
+    #[ORM\OneToMany(mappedBy: 'wishUser', targetEntity: Wish::class)]
+    private Collection $wish;
+
+    public function __construct()
+    {
+        $this->wish = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -284,6 +294,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMaxHours(int $maxHours): static
     {
         $this->maxHours = $maxHours;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wish>
+     */
+    public function getWish(): Collection
+    {
+        return $this->wish;
+    }
+
+    public function addWish(Wish $wish): static
+    {
+        if (!$this->wish->contains($wish)) {
+            $this->wish->add($wish);
+            $wish->setWishUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWish(Wish $wish): static
+    {
+        if ($this->wish->removeElement($wish)) {
+            // set the owning side to null (unless already changed)
+            if ($wish->getWishUser() === $this) {
+                $wish->setWishUser(null);
+            }
+        }
 
         return $this;
     }
