@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSemester } from '../services/api';
 import { useRoute } from 'wouter';
+import WishForm from './WishForm';
 
 function Semester() {
     const [semester, setSemester] = useState(null);
@@ -26,7 +27,7 @@ function Semester() {
                                     <br/><br/>
                                     <p className="groupe">Groupes |</p>
                                     <div className="Postuler-container">
-                                        <a href={`/wish/new?subjectId=${subjectId}`} className="ajouter-button">Postuler</a>
+                                        <WishForm subjectId={subjectId} />
                                     </div>
                                 </li>
                             );
