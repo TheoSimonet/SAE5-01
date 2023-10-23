@@ -48,6 +48,7 @@ final class WishFactory extends ModelFactory
     {
         return [
             'chosenGroups' => random_int(0, 6),
+            'wishUser' => UserFactory::new(),
         ];
     }
 
