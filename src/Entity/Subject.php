@@ -62,11 +62,7 @@ class Subject
     #[Groups(['get_Subject'])]
     private ?string $subjectCode = null;
 
-    #[ORM\Column]
-    #[Groups(['get_Subject'])]
-    private ?int $hoursTotal = null;
-
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class)]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
 
     public function __construct()
