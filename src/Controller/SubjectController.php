@@ -30,6 +30,12 @@ class SubjectController extends AbstractController
                 $spreadsheet = IOFactory::load($file->getPathname());
                 $entityManager = $this->registry->getManagerForClass(Subject::class);
 
+                $groupRepository = $entityManager->getRepository(Group::class);
+                $groupRepository->createQueryBuilder('g')
+                    ->delete()
+                    ->getQuery()
+                    ->execute();
+
                 $subjectRepository = $entityManager->getRepository(Subject::class);
                 $subjectRepository->createQueryBuilder('s')
                     ->delete()
@@ -86,47 +92,34 @@ class SubjectController extends AbstractController
                                 continue;
                             }
 
-                            $subject = new Subject();
-
-                            if (empty($row[1]) && !empty($row[3])) {
-                                for ($i = count($allData[$sheetName]) - 1; $i >= 0; --$i) {
-                                    if (!empty($allData[$sheetName][$i][1])) {
-                                        $subjectCode = $allData[$sheetName][$i][1];
-                                        break;
-                                    }
-                                }
-
-                                $subject->setSubjectCode($subjectCode ?? null);
-                            } else {
-                                $subject->setSubjectCode($row[1]);
-                            }
-
                             if (empty($row[2])) {
-                                for ($i = count($allData[$sheetName]) - 1; $i >= 0; --$i) {
-                                    if (!empty($allData[$sheetName][$i][2])) {
-                                        $name = $allData[$sheetName][$i][2];
-                                        break;
-                                    }
-                                }
-
-                                $subject->setName($name ?? null);
-                            } else {
-                                $subject->setName($row[2]);
+                                continue;
                             }
 
-                            $hourstotal = (int) $row[5];
-                            $subject->setHoursTotal($hourstotal);
-                            $subject->setFirstWeek($firstWeek);
-                            $subject->setLastWeek($lastWeek);
-                            $entityManager->persist($subject);
-                            $entityManager->flush();
+                            $subjectCode = $row[1];
+                            $name = $row[2];
+
+                            $existingSubject = $subjectRepository->findOneBy([
+                                'subjectCode' => $subjectCode,
+                                'name' => $name,
+                            ]);
+
+                            if ($existingSubject) {
+                                $subject = $existingSubject;
+                            } else {
+                                $subject = new Subject();
+                                $subject->setSubjectCode($subjectCode);
+                                $subject->setName($name);
+                                $subject->setFirstWeek($firstWeek);
+                                $subject->setLastWeek($lastWeek);
+                                $entityManager->persist($subject);
+                                $entityManager->flush();
+                            }
 
                             $subjectCode = $row[4];
 
                             $group = new Group();
                             $group->setType($subjectCode);
-
-                            $subject = $entityManager->getRepository(Subject::class)->findOneBy(['subjectCode' => $subjectCode]);
 
                             if ($subject) {
                                 $group->setSubject($subject);
@@ -135,13 +128,6 @@ class SubjectController extends AbstractController
                                 $entityManager->flush();
                             } else {
                                 $this->addFlash('error', 'No subject found for group: '.$subjectCode);
-                            }
-                            if ($subject) {
-                                dump('Subject ID: '.$subject->getId());
-                                dump('Group Type: '.$group->getType());
-                                dump('Subject: ', $group->getSubject());
-                            } else {
-                                dump('Subject is null');
                             }
                         }
                     } else {
