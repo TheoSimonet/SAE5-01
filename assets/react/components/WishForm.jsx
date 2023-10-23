@@ -12,9 +12,11 @@ function WishForm({ subjectId }) {
         getMe().then((userData) => {
             setUser(userData);
         });
+
         fetchGroups().then((data) => {
             setGroupeTypes(data);
         });
+
         fetchGroups().then((data) => {
             setGroups(data);
         });
@@ -22,11 +24,13 @@ function WishForm({ subjectId }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const selectedGroup = groupeTypes.find((group) => group.id === groupeType); // Utilisez l'ID du groupe
+        const groupId = selectedGroup ? selectedGroup.id : '';
 
         const formData = {
             chosenGroups,
             subjectId,
-            groupeType,
+            groupeType
         };
 
         fetch('/api/wishes', {
@@ -41,13 +45,14 @@ function WishForm({ subjectId }) {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log("ChosenGroups : ", chosenGroups);
-                    console.log("GroupeType : ", groupeType);
-                    console.log("Subject : ", subjectId);
+                    console.log("ChosenGroups: ", chosenGroups);
+                    console.log("GroupeType: ", groupeType);
+                    console.log("SubjectId: ", subjectId);
                     throw new Error('Erreur de requête');
                 }
             })
             .then(data => {
+                // Traitez la réponse réussie ici (si applicable)
             })
             .catch(error => {
                 console.error('Une erreur s\'est produite :', error);
@@ -63,9 +68,10 @@ function WishForm({ subjectId }) {
                     id="chosenGroups"
                     name="chosenGroups"
                     value={chosenGroups}
-                    onChange={(e) => setChosenGroups(e.target.value)}
+                    onChange={(e) => setChosenGroups(parseInt(e.target.value, 10))}
                     className="form-control"
                 />
+
             </div>
 
             <div className="form-group">
@@ -79,7 +85,7 @@ function WishForm({ subjectId }) {
                 >
                     <option value="">Sélectionnez un groupe</option>
                     {groups.map((group) => (
-                        <option key={group.id} value={group.type}>
+                        <option key={group.id} value={`/api/groups/${group.id}`}>
                             {group.type}
                         </option>
                     ))}

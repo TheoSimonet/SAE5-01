@@ -27,7 +27,7 @@ function Semester() {
                                     <br/><br/>
                                     <p className="groupe">Groupes |</p>
                                     <div className="Postuler-container">
-                                        <WishForm subjectId={subjectId} />
+                                        <WishForm subjectId={`/api/subjects/${subjectId}`} />
                                     </div>
                                 </li>
                             );
