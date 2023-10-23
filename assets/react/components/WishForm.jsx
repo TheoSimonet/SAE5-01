@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getMe, fetchGroups } from '../services/api';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 function WishForm({ subjectId }) {
@@ -8,11 +8,12 @@ function WishForm({ subjectId }) {
     const [groupeType, setGroupeType] = useState('');
     const [groupeTypes, setGroupeTypes] = useState([]);
     const [groups, setGroups] = useState([]);
-    const [user, setUser] = useState(null);
+    const [wishUser, setWishUser] = useState(null); // Initialisez le wishUser à null
 
     useEffect(() => {
+        // Utilisez l'effet pour obtenir l'utilisateur actuel
         getMe().then((userData) => {
-            setUser(userData);
+            setWishUser(userData);
         });
 
         fetchGroups().then((data) => {
@@ -33,13 +34,14 @@ function WishForm({ subjectId }) {
             chosenGroups,
             subjectId,
             groupeType,
+            wishUser:`/api/users/${wishUser.id}`,
         };
 
         fetch('/api/wishes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
+                'Authorization': `Bearer ${wishUser.token}`
             },
             body: JSON.stringify(formData),
         })
@@ -81,7 +83,6 @@ function WishForm({ subjectId }) {
                     onChange={(e) => setChosenGroups(parseInt(e.target.value, 10))}
                     className="form-control"
                 />
-
             </div>
 
             <div className="form-group">
