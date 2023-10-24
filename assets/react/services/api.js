@@ -35,14 +35,30 @@ export function getMe()
         }});
 }
 
-export function getSubject(id) {
-    return fetch(`${BASE_URL}/subjects/${id}`).then((response) =>
+export function fetchWishes() {
+    return fetch(`${BASE_URL}/wishes`).then((response) =>
         response.ok ? response.json() : Promise.resolve(null),
     );
 }
 
-export function fetchWishes() {
-    return fetch(`${BASE_URL}/wishes`).then((response) =>
+export function getWish(id) {
+    return fetch(`${BASE_URL}/wishes/${id}`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
+
+export function getSubject(id) {
+    const isFullUrl = id.startsWith(BASE_URL + '/subjects/');
+    const url = isFullUrl ? id : `${BASE_URL}/subjects/${id}`;
+    return fetch(url).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
+
+export function getSubjectGroup(id) {
+    const isFullUrl = id.startsWith(BASE_URL + '/groups/');
+    const url = isFullUrl ? id : `${BASE_URL}/groups/${id}`;
+    return fetch(url).then((response) =>
         response.ok ? response.json() : Promise.resolve(null),
     );
 }

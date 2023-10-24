@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
-import {fetchWishes, getMe} from "../services/api";
+import {fetchWishes, getMe, getSubject, getSubjectGroup} from "../services/api";
 
 function Repartition() {
     const [wishes, setWishes] = useState([]);
@@ -20,6 +20,16 @@ function Repartition() {
                             return wish.wishUser === `/api/users/${currentUserID}`;
                         });
 
+                        const wishesWithSubjects = await Promise.all(userWishes.map(async wish => {
+                            const subjectResponse = await getSubject(wish.subjectId);
+                            const subjectGroupResponse = await getSubjectGroup(wish.groupeType);
+
+                            if (subjectResponse) {
+                                wish.subjectName = subjectResponse.name;
+                                wish.groupName = subjectGroupResponse.type;
+                            }
+                            return wish;
+                        }));
 
                         setWishes(wishesWithSubjects);
                     }
@@ -31,7 +41,6 @@ function Repartition() {
         fetchData();
     }, []);
 
-function Repartition() {
     return (
         <div className="table-container">
             <h2>Répartition de vos heures</h2>
@@ -65,4 +74,4 @@ function Repartition() {
     );
 }
 
-export default Repartition};
+export default Repartition;
