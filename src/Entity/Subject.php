@@ -18,8 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['get_Subject']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['get_Subject']],
+        ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
@@ -43,27 +47,33 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $firstWeek = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $lastWeek = null;
 
     #[ORM\Column(length: 40)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $subjectCode = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['get_Subject', 'get_Semester'])]
+    private ?Semester $semester = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
+
 
     public function __construct()
     {
@@ -127,14 +137,15 @@ class Subject
         return $this;
     }
 
-    public function getHoursTotal(): ?int
+
+    public function getSemester(): ?Semester
     {
-        return $this->hoursTotal;
+        return $this->semester;
     }
 
-    public function setHoursTotal(int $hoursTotal): static
+    public function setSemester(?Semester $semester): static
     {
-        $this->hoursTotal = $hoursTotal;
+        $this->semester = $semester;
 
         return $this;
     }
@@ -168,4 +179,5 @@ class Subject
 
         return $this;
     }
+
 }

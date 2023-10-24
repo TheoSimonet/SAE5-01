@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Group;
 use App\Entity\Subject;
+use App\Repository\SemesterRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/upload', name: 'app_upload')]
-    public function upload(Request $request): Response
+    public function upload(Request $request, SemesterRepository $semesterRepository): Response
     {
         if ($request->isMethod('POST')) {
             $file = $request->files->get('file');
@@ -98,6 +99,10 @@ class SubjectController extends AbstractController
 
                             $subjectCode = $row[1];
                             $name = $row[2];
+                            $semesterNumber = (int) $row[1][2];
+
+
+                            $semester = $semesterRepository->findOneBy(['name' => "Semestre $semesterNumber"]);
 
                             $existingSubject = $subjectRepository->findOneBy([
                                 'subjectCode' => $subjectCode,
@@ -112,6 +117,7 @@ class SubjectController extends AbstractController
                                 $subject->setName($name);
                                 $subject->setFirstWeek($firstWeek);
                                 $subject->setLastWeek($lastWeek);
+                                $subject->setSemester($semester);
                                 $entityManager->persist($subject);
                                 $entityManager->flush();
                             }

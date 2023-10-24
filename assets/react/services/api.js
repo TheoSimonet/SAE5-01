@@ -35,3 +35,8 @@ export function getMe()
         }});
 }
 
+export function getSubject(id) {
+    return fetch(`${BASE_URL}/subjects/${id}`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
