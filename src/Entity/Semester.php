@@ -23,7 +23,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             normalizationContext: ['groups' => ['get_Semester']],
         ),
-        new GetCollection(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['get_Semester']]
+        ),
         new Post(
             security: "is_granted('ROLE_USER')"
         ),
