@@ -40,3 +40,9 @@ export function getSubject(id) {
         response.ok ? response.json() : Promise.resolve(null),
     );
 }
+
+export function fetchWishes() {
+    return fetch(`${BASE_URL}/wishes`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}

@@ -1,6 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
-import {Link, Route, Router} from 'wouter';
+import { Link } from 'wouter';
+import {fetchWishes, getMe} from "../services/api";
+
+function Repartition() {
+    const [wishes, setWishes] = useState([]);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userData = await getMe();
+                if (userData) {
+                    const currentUserID = userData.id;
+                    setUserId(currentUserID);
+                    const wishData = await fetchWishes();
+                    if (wishData && Array.isArray(wishData['hydra:member'])) {
+                        const userWishes = wishData['hydra:member'].filter(wish => {
+                            return wish.wishUser === `/api/users/${currentUserID}`;
+                        });
+
+
+                        setWishes(wishesWithSubjects);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+    }, []);
 
 function Repartition() {
     return (
@@ -36,4 +65,4 @@ function Repartition() {
     );
 }
 
-export default Repartition;
+export default Repartition};
