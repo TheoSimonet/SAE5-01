@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\SubjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -20,9 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(
-            normalizationContext: ['groups' => ['get_Subject','get_Wish']],
-        ),
+        new Get(),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
@@ -46,44 +43,31 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject', 'getWish'])]
+    #[Groups(['get_Subject'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject', 'get_Semester', 'getWish'])]
+    #[Groups(['get_Subject'])]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject', 'get_Semester'])]
-    private ?\DateTimeInterface $firstWeek = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['get_Subject', 'get_Semester'])]
-    private ?\DateTimeInterface $lastWeek = null;
-
-    #[ORM\Column(length: 25)]
-    #[Groups(['get_Subject', 'get_Semester'])]
-    private ?string $subjectCode = null;
+    #[ORM\Column]
+    #[Groups(['get_Subject'])]
+    private ?int $firstWeek = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
-    private ?int $hoursTotal = null;
+    #[Groups(['get_Subject'])]
+    private ?int $lastWeek = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subject')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['get_User', 'set_User'])]
-    private ?Semester $semester = null;
+    #[ORM\Column(length: 40)]
+    #[Groups(['get_Subject'])]
+    private ?string $subjectCode = null;
 
-    #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
-    private Collection $weeks;
-
-    #[ORM\OneToMany(mappedBy: 'subjectId', targetEntity: Wish::class)]
-    private Collection $wishes;
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
+    private Collection $groups;
 
     public function __construct()
     {
-        $this->weeks = new ArrayCollection();
-        $this->wishes = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,26 +88,26 @@ class Subject
         return $this;
     }
 
-    public function getFirstWeek(): ?\DateTimeInterface
+    public function getFirstWeek(): ?int
     {
         return $this->firstWeek;
     }
 
     #[Groups(['get_Subject', 'set_Subject'])]
-    public function setFirstWeek(\DateTimeInterface $firstWeek): static
+    public function setFirstWeek(int $firstWeek): static
     {
         $this->firstWeek = $firstWeek;
 
         return $this;
     }
 
-    public function getLastWeek(): ?\DateTimeInterface
+    public function getLastWeek(): ?int
     {
         return $this->lastWeek;
     }
 
     #[Groups(['get_Subject', 'set_Subject'])]
-    public function setLastWeek(\DateTimeInterface $lastWeek): static
+    public function setLastWeek(int $lastWeek): static
     {
         $this->lastWeek = $lastWeek;
 
@@ -134,6 +118,7 @@ class Subject
     {
         return $this->subjectCode;
     }
+
     #[Groups(['get_Subject', 'set_Subject'])]
     public function setSubjectCode(string $subjectCode): static
     {
@@ -154,69 +139,30 @@ class Subject
         return $this;
     }
 
-    public function getSemester(): ?Semester
-    {
-        return $this->semester;
-    }
-
-    public function setSemester(?Semester $semester): static
-    {
-        $this->semester = $semester;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Week>
+     * @return Collection<int, Group>
      */
-    public function getWeeks(): Collection
+    public function getGroups(): Collection
     {
-        return $this->weeks;
+        return $this->groups;
     }
 
-    public function addWeek(Week $week): static
+    public function addGroup(Group $group): static
     {
-        if (!$this->weeks->contains($week)) {
-            $this->weeks->add($week);
-            $week->addSubject($this);
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->setSubject($this);
         }
 
         return $this;
     }
 
-    public function removeWeek(Week $week): static
+    public function removeGroup(Group $group): static
     {
-        if ($this->weeks->removeElement($week)) {
-            $week->removeSubject($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Wish>
-     */
-    public function getWishes(): Collection
-    {
-        return $this->wishes;
-    }
-
-    public function addWish(Wish $wish): static
-    {
-        if (!$this->wishes->contains($wish)) {
-            $this->wishes->add($wish);
-            $wish->setSubjectId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWish(Wish $wish): static
-    {
-        if ($this->wishes->removeElement($wish)) {
+        if ($this->groups->removeElement($group)) {
             // set the owning side to null (unless already changed)
-            if ($wish->getSubjectId() === $this) {
-                $wish->setSubjectId(null);
+            if ($group->getSubject() === $this) {
+                $group->setSubject(null);
             }
         }
 

@@ -19,9 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         new Post(
-            normalizationContext: ['groups' => ['get_Group']],
-            denormalizationContext: ['groups' => ['set_Group']],
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
         ),
         new Put(
             security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
@@ -55,10 +53,6 @@ class Group
 
     #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['group:read', 'group:write'])]
-    private ?string $lib = null;
-
-    #[ORM\Column(type: 'string', length: 50)]
-    #[Groups(['group:read', 'group:write'])]
     private ?string $type = null;
 
     #[ORM\OneToMany(mappedBy: 'groupeType', targetEntity: Wish::class)]
@@ -70,22 +64,13 @@ class Group
         $this->wishes = new ArrayCollection();
     }
 
+    #[ORM\ManyToOne(inversedBy: 'groups')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Subject $subject = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLib(): ?string
-    {
-        return $this->lib;
-    }
-
-    #[Groups(['group:write'])]
-    public function setLib(string $lib): static
-    {
-        $this->lib = $lib;
-
-        return $this;
     }
 
     public function getType(): ?string
@@ -122,7 +107,6 @@ class Group
     public function removeWish(Wish $wish): static
     {
         if ($this->wishes->removeElement($wish)) {
-            // set the owning side to null (unless already changed)
             if ($wish->getGroupeType() === $this) {
                 $wish->setGroupeType(null);
             }
@@ -130,4 +114,17 @@ class Group
 
         return $this;
     }
+
+    public function getSubject(): ?Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?Subject $subject): static
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
 }

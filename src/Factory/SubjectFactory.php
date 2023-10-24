@@ -47,9 +47,9 @@ final class SubjectFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'firstWeek' => self::faker()->dateTime(),
+            'firstWeek' => self::faker()->randomNumber('2'),
             'hoursTotal' => self::faker()->randomNumber('4'),
-            'lastWeek' => self::faker()->dateTime(),
+            'lastWeek' => self::faker()->randomNumber('4'),
             'name' => self::faker()->text(15),
             'subjectCode' => self::faker()->text(5),
             'semester' => SemesterFactory::new(),

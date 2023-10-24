@@ -11,6 +11,20 @@
         </div>
     {% endif %}
 
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        tr {
+            border-bottom: 1px solid black;
+            margin: 10px;
+        }
+    </style>
     <form method="post" enctype="multipart/form-data">
         <input type="file" name="file">
         <button type="submit">Submit</button>
@@ -22,7 +36,7 @@
             <table>
                 {% for row in sheetData %}
                     <tr>
-                        {% for col in row %}
+                        {% for col in row|slice(1) %}
                             <td>{{ col }}</td>
                         {% endfor %}
                     </tr>
