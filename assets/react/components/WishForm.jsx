@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { getMe, fetchGroups } from '../services/api';
-import { toast } from "react-toastify";
+import { getMe, fetchGroupsBySubject } from '../services/api';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function WishForm({ subjectId }) {
     const [chosenGroups, setChosenGroups] = useState('');
     const [groupeType, setGroupeType] = useState('');
     const [groupeTypes, setGroupeTypes] = useState([]);
-    const [groups, setGroups] = useState([]);
-    const [wishUser, setWishUser] = useState(null); // Initialisez le wishUser à null
+    const [wishUser, setWishUser] = useState(null);
 
     useEffect(() => {
-        // Utilisez l'effet pour obtenir l'utilisateur actuel
         getMe().then((userData) => {
             setWishUser(userData);
         });
 
-        fetchGroups().then((data) => {
-            setGroupeTypes(data);
-        });
+        const fetchGroupeTypes = () => {
+            if (subjectId) {
+                fetchGroupsBySubject(subjectId).then((data) => {
+                    setGroupeTypes(data);
+                });
+            }
+        };
 
-        fetchGroups().then((data) => {
-            setGroups(data);
-        });
-    }, []);
+        fetchGroupeTypes();
+    }, [subjectId]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,25 +34,25 @@ function WishForm({ subjectId }) {
             chosenGroups,
             subjectId,
             groupeType,
-            wishUser:`/api/users/${wishUser.id}`,
+            wishUser: `/api/users/${wishUser.id}`,
         };
 
         fetch('/api/wishes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${wishUser.token}`
+                Authorization: `Bearer ${wishUser.token}`,
             },
             body: JSON.stringify(formData),
         })
-            .then(response => {
+            .then((response) => {
                 if (response.ok) {
                     return response.json();
                 } else {
                     throw new Error('Erreur de requête');
                 }
             })
-            .then(data => {
+            .then((data) => {
                 toast.success('Vœu ajouté avec succès!', {
                     position: 'top-left',
                     autoClose: 2000,
@@ -60,7 +60,7 @@ function WishForm({ subjectId }) {
                     theme: 'colored',
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Une erreur s\'est produite :', error);
                 toast.error('Erreur lors de l\'ajout du vœu', {
                     position: 'top-right',
@@ -95,15 +95,22 @@ function WishForm({ subjectId }) {
                     className="form-control"
                 >
                     <option value="">Sélectionnez un groupe</option>
-                    {groups.map((group) => (
-                        <option key={group.id} value={`/api/groups/${group.id}`}>
-                            {group.type}
-                        </option>
-                    ))}
+                    {groupeTypes
+                        .filter((group) => {
+                            return group.subject === subjectId;
+                        })
+                        .map((group) => (
+                            <option key={group.id} value={group.id}>
+                                {group.type}
+                            </option>
+                        ))}
                 </select>
+
             </div>
 
-            <button type="submit" className="btn btn-primary">Postuler</button>
+            <button type="submit" className="btn btn-primary">
+                Postuler
+            </button>
         </form>
     );
 }

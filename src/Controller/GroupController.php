@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\Subject;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,5 +92,28 @@ class GroupController extends AbstractController
         }
 
         return $this->json($form->getErrors(true, false), Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/api/subjects/{subjectId}/groups', name: 'api_subject_groups', methods: ['GET'])]
+    public function getGroupsBySubject(int $subjectId): JsonResponse
+    {
+        $subject = $this->entityManager->getRepository(Subject::class)->find($subjectId);
+
+        if (!$subject) {
+            return $this->json(['message' => 'Matière non trouvée'], Response::HTTP_NOT_FOUND);
+        }
+
+        $groups = $subject->getGroups();
+
+        $groupData = [];
+
+        foreach ($groups as $group) {
+            $groupData[] = [
+                'id' => $group->getId(),
+                'type' => $group->getType(),
+            ];
+        }
+
+        return $this->json($groupData);
     }
 }
