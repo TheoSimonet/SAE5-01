@@ -82,6 +82,12 @@ export async function deleteWish(wishId) {
             'Content-Type': 'application/json',
         },
     });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error('Erreur lors de la suppression du vœu');
+    }
 }
 
 export function getUserRole(id) {
