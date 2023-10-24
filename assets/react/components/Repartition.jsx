@@ -42,17 +42,18 @@ function Repartition() {
     }, []);
 
     const handleDeleteWish = async (wishId) => {
-        if (!wishId) {
-            console.error("ID de vœu invalide.");
-            return;
+        const confirmed = window.confirm("Voulez-vous vraiment supprimer ce vœu ?");
+        if (confirmed) {
+            try {
+                await deleteWish(wishId);
+            } catch (error) {
+                console.error("Error deleting wish:", error);
+            }
         }
-        try {
-            await deleteWish(wishId);
-            setWishes((prevWishes) => prevWishes.filter((wish) => wish.id !== wishId));
-        } catch (error) {
-            console.error("Error deleting wish:", error);
-        }
+        window.location.reload();
     };
+
+
 
 
     return (
