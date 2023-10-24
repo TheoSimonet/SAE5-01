@@ -74,6 +74,16 @@ export function getSubjectGroup(id) {
     );
 }
 
+export async function deleteWish(wishId) {
+
+    const response = await fetch(`/api/wishes/${wishId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}
+
 export function getUserRole(id) {
     return fetch(`${BASE_URL}/users/${id}`, { credentials: "include" })
         .then((response) => {
