@@ -25,7 +25,15 @@ class NbGroupFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $values = [[6, 1, 1], [3, 2, 1], [1, 3, 1]]; // [nombre de groupe, idCategorie, idMatiere]
+        $values = [[6, 1, 1], [3, 2, 1], [0, 3, 1],
+                    [7, 1, 2], [4, 2, 2], [2, 3, 2],
+                    [6, 1, 3], [3, 2, 3], [1, 3, 3],
+                    [6, 1, 4], [3, 2, 4], [1, 3, 4],
+                    [6, 1, 5], [3, 2, 5], [1, 3, 5],
+                    [6, 1, 6], [3, 2, 6], [1, 3, 6],
+                    [6, 1, 7], [3, 2, 7], [1, 3, 7],
+                    [6, 1, 8], [3, 2, 8], [1, 3, 8],
+                    [6, 1, 9], [3, 2, 9], [1, 3, 9]]; // [nombre de groupe, idCategorie, idMatiere]
 
         foreach ($values as $value) {
             $group = $this->group->find($value[1]);
