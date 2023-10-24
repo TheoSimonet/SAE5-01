@@ -22,6 +22,18 @@ export function getGroup(id) {
     );
 }
 
+export function fetchGroupsBySubject(subjectId) {
+    return fetch(`${BASE_URL}/groups?subject=${subjectId}`)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject('Failed to fetch groups');
+        });
+}
+
+
+
 
 
 

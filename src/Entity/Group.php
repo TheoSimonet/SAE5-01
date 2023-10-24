@@ -66,6 +66,7 @@ class Group
 
     #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['group:read', 'group:write'])]
     private ?Subject $subject = null;
 
     public function getId(): ?int
