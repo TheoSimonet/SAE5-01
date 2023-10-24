@@ -23,8 +23,6 @@ export function getGroup(id) {
 }
 
 
-
-
 export function getMe()
 {
     return fetch(`${BASE_URL}/me`, {credentials: "include"}).then((response) => {
@@ -33,5 +31,23 @@ export function getMe()
         } else if (response.status === 401) {
             return Promise.resolve(null);
         }});
+}
+
+export function fetchWishes() {
+    return fetch(`${BASE_URL}/wishes`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
+
+export function getWish(id) {
+    return fetch(`${BASE_URL}/wishes/${id}`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
+
+export function getSubject(id) {
+    return fetch(`${BASE_URL}/subjects/${id}`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
 }
 
