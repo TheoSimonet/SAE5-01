@@ -77,42 +77,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $postalCode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_User', 'set_User'])]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['set_User', 'get_Me', 'get_User'])]
+    #[Groups(['set_User', 'get_Me', 'get_me'])]
     private ?int $minHours = null;
 
     #[ORM\Column]
-    #[Groups(['set_User', 'get_Me', 'get_User'])]
+    #[Groups(['set_User', 'get_Me', 'get_me'])]
     private ?int $maxHours = null;
 
     #[ORM\OneToMany(mappedBy: 'wishUser', targetEntity: Wish::class)]
+    #[Groups(['get_User', 'set_User', 'get_me'])]
     private Collection $wish;
 
     public function __construct()
