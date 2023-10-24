@@ -113,7 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $maxHours = null;
 
     #[ORM\OneToMany(mappedBy: 'wishUser', targetEntity: Wish::class)]
-    #[Groups(['get_User', 'set_User', 'get_me'])]
     private Collection $wish;
 
     public function __construct()
