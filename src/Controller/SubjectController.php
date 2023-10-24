@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\Semester;
 use App\Entity\Subject;
+use App\Repository\SemesterRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,10 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class SubjectController extends AbstractController
 {
     private ManagerRegistry $registry;
+    private SemesterRepository $semesterRepository;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, SemesterRepository $semesterRepository)
     {
         $this->registry = $registry;
+        $this->semesterRepository = $semesterRepository;
     }
 
     #[Route('/upload', name: 'app_upload')]
@@ -99,6 +103,21 @@ class SubjectController extends AbstractController
                             $subjectCode = $row[1];
                             $name = $row[2];
 
+                            preg_match('/\d+/', $subjectCode, $matches);
+                            $semesterNumber = $matches[0] ?? null;
+
+                            if ($semesterNumber) {
+                                $semester = $this->semesterRepository->findOneBy(['name' => 'Semestre '.$semesterNumber]);
+
+                                if (!$semester) {
+                                    $this->addFlash('error', 'No semester found for subject: '.$subjectCode);
+                                    continue;
+                                }
+                            } else {
+                                $this->addFlash('error', 'No semester number found for subject: '.$subjectCode);
+                                continue;
+                            }
+
                             $existingSubject = $subjectRepository->findOneBy([
                                 'subjectCode' => $subjectCode,
                                 'name' => $name,
@@ -112,6 +131,7 @@ class SubjectController extends AbstractController
                                 $subject->setName($name);
                                 $subject->setFirstWeek($firstWeek);
                                 $subject->setLastWeek($lastWeek);
+                                $subject->setSemester($semester); // Associate the semester
                                 $entityManager->persist($subject);
                                 $entityManager->flush();
                             }
