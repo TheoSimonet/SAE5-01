@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['get_Semester']],
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['get_Semester']]
+            normalizationContext: ['groups' => ['get_Semester']],
         ),
         new Post(
             security: "is_granted('ROLE_USER')"
@@ -45,7 +45,7 @@ class Semester
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Semester'])]
+    #[Groups(['get_Semester', 'get_Subject'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -64,7 +64,7 @@ class Semester
     private Collection $periods;
 
     #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class)]
-    #[Groups(['get_User', 'set_User', 'get_Semester'])]
+    #[Groups(['get_Semester'])]
     private Collection $subjects;
 
     public function __construct()

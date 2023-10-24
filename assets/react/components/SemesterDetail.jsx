@@ -13,16 +13,13 @@ function Semester() {
         });
     }, [params.id]);
 
-    console.log(semester);
-
     return (
         <div>
             {semester === null ? 'Loading...' : (
                 <div>
                     <ul>
-                        {semester.subject.map((subject) => {
+                        {semester.subjects.map((subject) => {
                             const subjectId = subject['@id'].split('/').pop();
-
                             return (
                                 <li key={subjectId} className="semester-li">
                                     {subject.subjectCode + ' - ' + subject.name}

@@ -47,32 +47,33 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $firstWeek = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?int $lastWeek = null;
 
     #[ORM\Column(length: 40)]
-    #[Groups(['get_Subject'])]
+    #[Groups(['get_Subject', 'get_Semester'])]
     private ?string $subjectCode = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['get_Subject', 'get_Semester'])]
+    private ?Semester $semester = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
 
-    #[ORM\ManyToOne(inversedBy: 'subjects')]
-    #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['get_User', 'set_User', 'get_Subject'])]
-    private ?Semester $semester = null;
 
     public function __construct()
     {
@@ -136,14 +137,15 @@ class Subject
         return $this;
     }
 
-    public function getHoursTotal(): ?int
+
+    public function getSemester(): ?Semester
     {
-        return $this->hoursTotal;
+        return $this->semester;
     }
 
-    public function setHoursTotal(int $hoursTotal): static
+    public function setSemester(?Semester $semester): static
     {
-        $this->hoursTotal = $hoursTotal;
+        $this->semester = $semester;
 
         return $this;
     }
@@ -178,15 +180,4 @@ class Subject
         return $this;
     }
 
-    public function getSemester(): ?Semester
-    {
-        return $this->semester;
-    }
-
-    public function setSemester(?Semester $semester): static
-    {
-        $this->semester = $semester;
-
-        return $this;
-    }
 }
