@@ -155,6 +155,12 @@ class SubjectController extends AbstractController
                             } else {
                                 $this->addFlash('error', 'No subject found for group: '.$subjectCode);
                             }
+
+                            $nbGroup = new NbGroup();
+                            $nbGroup->setNbGroup($row[3]);
+                            $subject->addIdNbGroup($nbGroup);
+                            $entityManager->persist($nbGroup);
+                            $entityManager->flush();
                         }
                     } else {
                         $this->addFlash('error', 'No data found in sheet: '.$sheetName);
