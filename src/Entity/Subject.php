@@ -65,6 +65,10 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
 
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Semester $semester = null;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
@@ -165,6 +169,18 @@ class Subject
                 $group->setSubject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSemester(): ?Semester
+    {
+        return $this->semester;
+    }
+
+    public function setSemester(?Semester $semester): static
+    {
+        $this->semester = $semester;
 
         return $this;
     }

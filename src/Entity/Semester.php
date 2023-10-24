@@ -61,14 +61,15 @@ class Semester
     #[ORM\ManyToMany(targetEntity: Period::class, mappedBy: 'Semester')]
     private Collection $periods;
 
-    #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Subject::class)]
     #[Groups(['get_User', 'set_User', 'get_Semester'])]
-    private Collection $subject;
+    private Collection $subjects;
 
     public function __construct()
     {
         $this->periods = new ArrayCollection();
         $this->subject = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,5 +171,13 @@ class Semester
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Subject>
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
     }
 }
