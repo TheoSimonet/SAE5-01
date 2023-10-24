@@ -29,7 +29,7 @@ class NbGroupFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($values as $value) {
             $group = $this->group->find($value[1]);
-            $subject = $this->subject->find($value[1]);
+            $subject = $this->subject->find($value[2]);
 
             $nbGroup = new NbGroup();
             $nbGroup->setNbGroup($value[0]);
