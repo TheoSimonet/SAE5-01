@@ -10,7 +10,10 @@ class WeekFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        WeekFactory::new()->createMany(10);
+        // $product = new Product();
+        // $manager->persist($product);
+
+        $manager->flush();
     }
 }
 
