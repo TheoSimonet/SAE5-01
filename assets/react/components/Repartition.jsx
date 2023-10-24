@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
-import {fetchWishes, getMe, getSubject, getSubjectGroup} from "../services/api";
+import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api"; // Assurez-vous que vous avez une fonction deleteWish dans vos services
 
 function Repartition() {
     const [wishes, setWishes] = useState([]);
@@ -41,6 +41,20 @@ function Repartition() {
         fetchData();
     }, []);
 
+    const handleDeleteWish = async (wishId) => {
+        if (!wishId) {
+            console.error("ID de vœu invalide.");
+            return;
+        }
+        try {
+            await deleteWish(wishId);
+            setWishes((prevWishes) => prevWishes.filter((wish) => wish.id !== wishId));
+        } catch (error) {
+            console.error("Error deleting wish:", error);
+        }
+    };
+
+
     return (
         <div className="table-container">
             <h2 className={"repartition"}>Répartition de vos heures</h2>
@@ -59,7 +73,7 @@ function Repartition() {
                         <td>{wish.chosenGroups} groupes de {wish.groupName} </td>
                         <td>
                             <button className="modifier-button">Modifier</button>
-                            <button className="supprimer-button">Supprimer</button>
+                            <button className="supprimer-button" onClick={() => handleDeleteWish(wish.id)}>Supprimer</button>
                         </td>
                     </tr>
                 ))}
