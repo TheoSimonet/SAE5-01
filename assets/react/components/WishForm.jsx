@@ -100,11 +100,12 @@ function WishForm({ subjectId }) {
                             return group.subject === subjectId;
                         })
                         .map((group) => (
-                            <option key={group.id} value={group.id}>
+                            <option key={group.id} value={`/api/groups/${group.id}`}>
                                 {group.type}
                             </option>
                         ))}
                 </select>
+
 
             </div>
 
