@@ -13,6 +13,8 @@ function Semester() {
         });
     }, [params.id]);
 
+    console.log(semester);
+
     return (
         <div>
             {semester === null ? 'Loading...' : (

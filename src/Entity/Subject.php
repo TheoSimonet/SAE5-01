@@ -18,8 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['get_Subject']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['get_Subject']],
+        ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
@@ -67,6 +71,7 @@ class Subject
 
     #[ORM\ManyToOne(inversedBy: 'subjects')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['get_User', 'set_User', 'get_Subject'])]
     private ?Semester $semester = null;
 
     public function __construct()
