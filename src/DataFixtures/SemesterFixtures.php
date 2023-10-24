@@ -10,11 +10,10 @@ class SemesterFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $semester= file_get_contents(__DIR__ . '/data/semester.json',true);
-        $semesters = json_decode($semester,true);
+        $semester = file_get_contents(__DIR__.'/data/semester.json', true);
+        $semesters = json_decode($semester, true);
 
-        foreach($semesters as $elmt)
-        {
+        foreach ($semesters as $elmt) {
             SemesterFactory::createOne([
                 'name' => $elmt['name'],
                 'startDate' => new \DateTime($elmt['startDate']),

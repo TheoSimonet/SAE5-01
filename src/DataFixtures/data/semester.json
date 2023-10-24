@@ -13,5 +13,21 @@
     "name": "Semestre 3",
     "startDate" : "2023-01-01",
     "endDate" : "2023-01-01"
-  }
+  },
+  {
+    "name": "Semestre 4",
+    "startDate" : "2023-01-01",
+    "endDate" : "2023-01-01"
+  },
+  {
+    "name": "Semestre 5",
+    "startDate" : "2023-01-01",
+    "endDate" : "2023-01-01"
+  },
+  {
+    "name": "Semestre 6",
+    "startDate" : "2023-01-01",
+    "endDate" : "2023-01-01"
+  }	
+
 ]
