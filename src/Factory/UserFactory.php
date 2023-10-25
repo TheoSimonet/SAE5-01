@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\ModelFactory;
-
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
 
@@ -56,7 +55,7 @@ final class UserFactory extends ModelFactory
             'password' => 'test',
             'phone' => self::faker()->phoneNumber,
             'minHours' => random_int(0, 35),
-            'maxHours' => random_int(0, 35) ,
+            'maxHours' => random_int(0, 35),
             'postalCode' => self::faker()->postcode,
         ];
     }
@@ -70,8 +69,7 @@ final class UserFactory extends ModelFactory
             ->afterInstantiate(function (User $user) {
                 $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
             })
-            ;
-
+        ;
     }
 
     protected static function getClass(): string
