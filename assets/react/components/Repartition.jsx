@@ -2,10 +2,24 @@ import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
 import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api";
+import EditWishForm from './EditWishForm';
 import Modal from 'react-modal';
+
 function Repartition() {
     const [wishes, setWishes] = useState([]);
     const [userId, setUserId] = useState(null);
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editWishId, setEditWishId] = useState(null);
+
+    const handleEditWish = (wishId) => {
+        setIsEditModalOpen(true);
+        setEditWishId(wishId);
+    };
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+        setEditWishId(null);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,9 +68,6 @@ function Repartition() {
         window.location.reload();
     };
 
-
-
-
     return (
         <div className="table-container">
             <h2 className={"repartition"}>Répartition de vos heures</h2>
@@ -74,7 +85,7 @@ function Repartition() {
                         <td>{wish.subjectCode + ' - ' + wish.subjectName}</td>
                         <td>{wish.chosenGroups} groupes de {wish.groupName} </td>
                         <td>
-                            <button className="modifier-button">Modifier</button>
+                            <button className="modifier-button" onClick={() => handleEditWish(wish.id)}>Modifier</button>
                             <button className="supprimer-button" onClick={() => handleDeleteWish(wish.id)}>Supprimer</button>
                         </td>
                     </tr>
