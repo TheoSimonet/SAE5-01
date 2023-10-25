@@ -47,28 +47,28 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?int $firstWeek = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?int $lastWeek = null;
 
     #[ORM\Column(length: 40)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?string $subjectCode = null;
 
     #[ORM\ManyToOne(inversedBy: 'subjects')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?Semester $semester = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
@@ -76,7 +76,6 @@ class Subject
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'subjects')]
     private Collection $tag;
-
 
     public function __construct()
     {
@@ -140,7 +139,6 @@ class Subject
 
         return $this;
     }
-
 
     public function getSemester(): ?Semester
     {
@@ -207,5 +205,4 @@ class Subject
 
         return $this;
     }
-
 }

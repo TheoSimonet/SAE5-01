@@ -3,24 +3,58 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
-#[ApiResource]
-class Tag
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['get_Tag']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['get_Tag']],
+        ),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') and object.getUser() == user",
+        ),
+        new Put(
+            normalizationContext: ['groups' => ['get_Tag']],
+            denormalizationContext: ['groups' => ['get_Tag']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+        new Patch(
+            normalizationContext: ['groups' => ['get_Tag']],
+            denormalizationContext: ['groups' => ['get_Tag']],
+            security: "is_granted('ROLE_USER') and object == user"
+        ),
+    ]
+)]class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['get_Subject', 'get_Tag'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['get_Subject', 'get_Tag'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'tag')]
+    #[Groups(['get_Subject', 'get_Tag'])]
     private Collection $subjects;
 
     public function __construct()
