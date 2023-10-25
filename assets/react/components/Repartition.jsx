@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
-import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api"; // Assurez-vous que vous avez une fonction deleteWish dans vos services
-
+import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api";
+import Modal from 'react-modal';
 function Repartition() {
     const [wishes, setWishes] = useState([]);
     const [userId, setUserId] = useState(null);
