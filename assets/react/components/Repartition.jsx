@@ -26,6 +26,7 @@ function Repartition() {
 
                             if (subjectResponse) {
                                 wish.subjectName = subjectResponse.name;
+                                wish.subjectCode = subjectResponse.subjectCode
                                 wish.groupName = subjectGroupResponse.type;
                             }
                             return wish;
@@ -70,7 +71,7 @@ function Repartition() {
                 <tbody>
                 {wishes.map(wish => (
                     <tr key={wish.id}>
-                        <td>{wish.subjectName}</td>
+                        <td>{wish.subjectCode + ' - ' + wish.subjectName}</td>
                         <td>{wish.chosenGroups} groupes de {wish.groupName} </td>
                         <td>
                             <button className="modifier-button">Modifier</button>
