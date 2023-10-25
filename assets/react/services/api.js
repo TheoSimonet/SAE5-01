@@ -74,3 +74,29 @@ export function getSubjectGroup(id) {
         response.ok ? response.json() : Promise.resolve(null),
     );
 }
+
+export function getUserRole(id) {
+    return fetch(`${BASE_URL}/users/${id}`, { credentials: "include" })
+        .then((response) => {
+            if (response.ok) {
+                return response.json().then((userData) => {
+                    if (userData && userData.roles && userData.roles.includes("ROLE_ADMIN")) {
+                        return "ROLE_ADMIN";
+                    } else if (userData && userData.roles && userData.roles.includes("ROLE_ENSEIGNANT")) {
+                        return "ROLE_ENSEIGNANT";
+                    } else {
+                        return null;
+                    }
+                });
+            } else if (response.status === 401) {
+                return Promise.resolve(null);
+            } else {
+                console.error('Error fetching user role:', response.status, response.statusText);
+                return Promise.reject('Failed to fetch user role');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
