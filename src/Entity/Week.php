@@ -18,7 +18,7 @@ class Week
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $numberHours = null;
+    private ?float $numberHours = null;
 
     #[ORM\Column]
     private ?int $weekNumber = null;
