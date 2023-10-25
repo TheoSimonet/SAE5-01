@@ -74,3 +74,17 @@ export function getSubjectGroup(id) {
         response.ok ? response.json() : Promise.resolve(null),
     );
 }
+
+export function getUserRole() {
+    return fetch(`${BASE_URL}/user/role`, { credentials: "include" })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                return Promise.resolve(null);
+            } else {
+                return Promise.reject('Failed to fetch user role');
+            }
+        });
+}
+
