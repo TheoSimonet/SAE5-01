@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Group;
 use App\Entity\Subject;
+use App\Entity\Tag;
 use App\Repository\SemesterRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -100,6 +101,7 @@ class SubjectController extends AbstractController
                             $subjectCode = $row[1];
                             $name = $row[2];
                             $semesterNumber = (int) $row[1][2];
+                            $tag = $row[7];
 
 
                             $semester = $semesterRepository->findOneBy(['name' => "Semestre $semesterNumber"]);
@@ -120,6 +122,24 @@ class SubjectController extends AbstractController
                                 $subject->setSemester($semester);
                                 $entityManager->persist($subject);
                                 $entityManager->flush();
+                            }
+
+                            $tabTags = explode(' / ', $tag);
+
+                            foreach ($tabTags as $tag) {
+                                $searchTag = $entityManager->getRepository(Tag::class)->findOneBy(['name' => $tag]);
+                                if (null == $searchTag) {
+                                    if ('' != $tag) {
+                                        $tagCreate = new Tag();
+                                        $tagCreate->setName($tag);
+                                        $tagCreate->addSubject($subject);
+
+                                        $entityManager->persist($tagCreate);
+                                        $entityManager->flush();
+                                    }
+                                } else {
+                                    $searchTag->addSubject($subject);
+                                }
                             }
 
                             $subjectCode = $row[4];
