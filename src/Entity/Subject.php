@@ -74,10 +74,13 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
 
+    #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'subject')]
+    private Collection $weeks;
 
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->weeks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,4 +183,30 @@ class Subject
         return $this;
     }
 
+    /**
+     * @return Collection<int, Week>
+     */
+    public function getWeeks(): Collection
+    {
+        return $this->weeks;
+    }
+
+    public function addWeek(Week $week): static
+    {
+        if (!$this->weeks->contains($week)) {
+            $this->weeks->add($week);
+            $week->addSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeek(Week $week): static
+    {
+        if ($this->weeks->removeElement($week)) {
+            $week->removeSubject($this);
+        }
+
+        return $this;
+    }
 }
