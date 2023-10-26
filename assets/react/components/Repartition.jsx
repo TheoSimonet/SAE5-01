@@ -3,7 +3,6 @@ import "../../styles/repartition.css";
 import { Link } from 'wouter';
 import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api";
 import EditWishForm from './EditWishForm';
-import Modal from 'react-modal';
 
 function Repartition() {
     const [wishes, setWishes] = useState([]);
@@ -61,12 +60,13 @@ function Repartition() {
         if (confirmed) {
             try {
                 await deleteWish(wishId);
+                setWishes(wishes.filter(wish => wish.id !== wishId));
             } catch (error) {
                 console.error("Error deleting wish:", error);
             }
         }
-        window.location.reload();
     };
+
 
     return (
         <div className="table-container">
