@@ -40,12 +40,15 @@ function Semester() {
                                         </div>
                                     ) : null}
 
-                                    {subject.tag.map(async (tag) => {
-                                        const tagData = await getSubjectTag(tag.split('/').pop());
-                                        return (
-                                            <div>{tagData.name}</div>
-                                        );
-                                    })}
+                                    {/*
+                                        {subject.tag.map(async (tag) => {
+                                            const tagData = await getSubjectTag(tag.split('/').pop());
+                                            return (
+                                                <div>{tagData.name}</div>
+                                            );
+                                        })}
+                                    */}
+
 
                                 </li>
                             );
