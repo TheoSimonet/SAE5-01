@@ -1,0 +1,86 @@
+.semester-li {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.subjectName {
+    font-size: 20px;
+    margin: 10px 0;
+    text-align: center;
+    padding: 10px;
+}
+
+
+.groupe {
+    background-color: #F2F2F2;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.Postuler-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Postuler {
+    background-color: #0066FF;
+    border-radius: 8px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-top: 5px;
+}
+
+.Postuler:hover {
+    background-color: #0055CC;
+}
+
+.modalTitle {
+    display: flex;
+    justify-content: center;
+}
+
+form input,
+form select {
+    background-color: #D9D9D9;
+    border-radius: 8px;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    width: 100%;
+}
+
+.modal button {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100px;
+}
+
+@media screen and (max-width: 800px) {
+    .semester-li {
+        width: 100%;
+        margin: 10px 0;
+    }
+}

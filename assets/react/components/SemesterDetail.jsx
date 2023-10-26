@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getSemester, getMe } from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
+import "../../styles/semesterDetail.css"
 
 function Semester() {
     const [semester, setSemester] = useState(null);
@@ -20,13 +21,13 @@ function Semester() {
     return (
         <div>
             {semester === null ? 'Loading...' : (
-                <div>
+                <div className={"subjectList"}>
                     <ul>
                         {semester.subjects.map((subject) => {
                             const subjectId = subject['@id'].split('/').pop();
                             return (
                                 <li key={subjectId} className="semester-li">
-                                    {subject.subjectCode + ' - ' + subject.name}
+                                    <h2 className={"subjectName"}>{subject.subjectCode + ' - ' + subject.name}</h2>
                                     <br /><br />
                                     {(userData && userData.roles && userData.roles.includes("ROLE_ADMIN")) ? (
                                         <div>
