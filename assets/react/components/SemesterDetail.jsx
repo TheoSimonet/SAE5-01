@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSemester, getMe } from '../services/api';
+import {getSemester, getMe, getSubject, getSubjectGroup, getSubjectTag} from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
 import "../../styles/semesterDetail.css"
@@ -17,6 +17,8 @@ function Semester() {
             setUserData(userData);
         });
     }, [params.id]);
+
+
 
     return (
         <div>
@@ -37,6 +39,14 @@ function Semester() {
                                             </div>
                                         </div>
                                     ) : null}
+
+                                    {subject.tag.map(async (tag) => {
+                                        const tagData = await getSubjectTag(tag.split('/').pop());
+                                        return (
+                                            <div>{tagData.name}</div>
+                                        );
+                                    })}
+
                                 </li>
                             );
                         })}

@@ -72,6 +72,7 @@ class Subject
     private ?Semester $semester = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private Collection $groups;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'subjects')]
