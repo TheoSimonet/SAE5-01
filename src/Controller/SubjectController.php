@@ -159,7 +159,6 @@ class SubjectController extends AbstractController
 
                             $nbGroup = new NbGroup();
                             $nbGroup->setNbGroup($row[3]);
-
                             $group->addNbGroup($nbGroup);
                             $entityManager->persist($nbGroup);
                             $entityManager->flush();

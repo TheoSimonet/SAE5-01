@@ -74,7 +74,7 @@ class Subject
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
     private Collection $weeks;
 
-    #[ORM\ManyToMany(targetEntity: NbGroup::class)]
+    #[ORM\ManyToMany(targetEntity: NbGroup::class, inversedBy: 'subjects')]
     private Collection $idNbGroup;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]

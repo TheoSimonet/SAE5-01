@@ -52,7 +52,7 @@ class NbGroup
     #[Groups(['get_NbGroup', 'set_NbGroup'])]
     private ?int $nbGroup = null;
 
-    #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'nbGroups')]
+    #[ORM\ManyToMany(targetEntity: Subject::class)]
     #[Groups(['get_NbGroup', 'set_NbGroup'])]
     private Collection $subject;
 
