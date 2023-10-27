@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {getSemester, fetchNbGroup, fetchSubjects, fetchGroups, getMe} from '../services/api';
+import {getSemester, fetchNbGroup, fetchGroups, getMe} from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
 import "../../styles/semesterDetail.css"
@@ -16,7 +16,6 @@ function Semester() {
         (async () => {
             setGroups(await fetchGroups())
 
-            // Récupérer les groupes
             const groupData = await fetchNbGroup();
             if (Array.isArray(groupData['hydra:member'])) {
                 setNbGroups(groupData['hydra:member']);
@@ -24,14 +23,6 @@ function Semester() {
                 setNbGroups(groupData.nbGroups);
             } else {
                 console.error("Data from API is not an array:", groupData);
-            }
-
-            // Récupérer les matières
-            const subjectData = await fetchSubjects();
-            if (Array.isArray(subjectData['hydra:member'])) {
-                setSubjects(subjectData['hydra:member']);
-            } else {
-                console.error("Data from API is not an array:", subjectData);
             }
         })()
     }, []);

@@ -3,6 +3,7 @@ api_platform:
     version: 1.0.0
     # Good defaults for REST APIs
     defaults:
+        pagination_enabled: false
         stateless: false
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
