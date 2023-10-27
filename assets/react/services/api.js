@@ -76,7 +76,7 @@ export function getSubjectGroup(id) {
 }
 
 export function getSubjectTag(id) {
-    const isFullUrl = id.startsWith(BASE_URL + '/groups/');
+    const isFullUrl = id.startsWith(BASE_URL + '/tags/');
     const url = isFullUrl ? id : `${BASE_URL}/tags/${id}`;
     return fetch(url).then((response) =>
         response.ok ? response.json() : Promise.resolve(null),

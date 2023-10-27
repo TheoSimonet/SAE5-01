@@ -41,7 +41,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_USER') and object == user"
         ),
     ]
-)]class Tag
+)] class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
