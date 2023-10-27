@@ -115,3 +115,21 @@ export function getUserRole(id) {
         });
 }
 
+export async function updateWish(wishId, updatedWishData) {
+    const url = `${BASE_URL}/wishes/${wishId}`;
+
+    const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedWishData),
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error('Erreur lors de la mise à jour du vœu');
+    }
+}
+
