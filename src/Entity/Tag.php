@@ -53,8 +53,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[Groups(['get_Subject', 'get_Tag'])]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'tag')]
-    #[Groups(['get_Subject', 'get_Tag'])]
+    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'tags')]
+    #[Groups(['get_Tag'])]
     private Collection $subjects;
 
     public function __construct()
