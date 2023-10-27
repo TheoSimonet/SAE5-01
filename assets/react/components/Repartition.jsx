@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
-import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api";
+import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish, updateWish } from "../services/api";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -15,15 +15,25 @@ function Repartition() {
     const [open, setOpen] = React.useState(false);
     const [modifiedValue, setModifiedValue] = useState('');
     const [selectedWishId, setSelectedWishId] = useState(null);
+    const [modifiedChosenGroups, setModifiedChosenGroups] = useState('');
+    const [modifiedGroupName, setModifiedGroupName] = useState('');
+
 
     const handleOpen = (wishId) => {
         setSelectedWishId(wishId);
         setOpen(true);
+        const selectedWish = wishes.find(wish => wish.id === wishId);
+        if (selectedWish) {
+            setModifiedChosenGroups(selectedWish.chosenGroups);
+            setModifiedGroupName(selectedWish.groupName);
+        }
     };
 
     const handleClose = () => {
         setSelectedWishId(null);
         setOpen(false);
+        setModifiedChosenGroups('');
+        setModifiedGroupName('');
     };
 
 
@@ -74,8 +84,24 @@ function Repartition() {
         }
     };
 
-    const handleSaveWish = () => {
+    const handleSaveWish = async () => {
         handleClose();
+        if (selectedWishId) {
+            try {
+                const updatedWish = {
+                    chosenGroups: modifiedChosenGroups,
+                    groupName: modifiedGroupName
+                };
+                await updateWish(selectedWishId, updatedWish);
+                setWishes(wishes.map(wish =>
+                    wish.id === selectedWishId
+                        ? { ...wish, chosenGroups: modifiedChosenGroups, groupName: modifiedGroupName }
+                        : wish
+                ));
+            } catch (error) {
+                console.error("error updating wish:", error);
+            }
+        }
     };
 
     return (
@@ -113,13 +139,23 @@ function Repartition() {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="modifiedValue"
-                        label="Nouvelle valeur"
+                        id="modifiedChosenGroups"
+                        label="Nombre de groupe"
                         type="text"
                         fullWidth
                         variant="standard"
-                        value={modifiedValue}
-                        onChange={(e) => setModifiedValue(e.target.value)}
+                        value={modifiedChosenGroups}
+                        onChange={(e) => setModifiedChosenGroups(e.target.value)}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="modifiedGroupName"
+                        label="Type de groupe"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={modifiedGroupName}
+                        onChange={(e) => setModifiedGroupName(e.target.value)}
                     />
                 </DialogContent>
                 <DialogActions>
