@@ -2,23 +2,30 @@ import React, { useState, useEffect } from 'react';
 import "../../styles/repartition.css";
 import { Link } from 'wouter';
 import { fetchWishes, getMe, getSubject, getSubjectGroup, deleteWish } from "../services/api";
-import EditWishForm from './EditWishForm';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Repartition() {
     const [wishes, setWishes] = useState([]);
     const [userId, setUserId] = useState(null);
+    const [open, setOpen] = React.useState(false);
+    const [modifiedValue, setModifiedValue] = useState('');
+    const [selectedWishId, setSelectedWishId] = useState(null);
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editWishId, setEditWishId] = useState(null);
+    const handleOpen = (wishId) => {
+        setSelectedWishId(wishId);
+        setOpen(true);
+    };
 
-    const handleEditWish = (wishId) => {
-        setIsEditModalOpen(true);
-        setEditWishId(wishId);
+    const handleClose = () => {
+        setSelectedWishId(null);
+        setOpen(false);
     };
-    const closeEditModal = () => {
-        setIsEditModalOpen(false);
-        setEditWishId(null);
-    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,6 +74,9 @@ function Repartition() {
         }
     };
 
+    const handleSaveWish = () => {
+        handleClose();
+    };
 
     return (
         <div className="table-container">
@@ -82,10 +92,10 @@ function Repartition() {
                 <tbody>
                 {wishes.map(wish => (
                     <tr key={wish.id}>
-                        <td>{wish.subjectCode + ' - ' + wish.subjectName}</td>
+                        <td>{wish.subjectName}</td>
                         <td>{wish.chosenGroups} groupes de {wish.groupName} </td>
                         <td>
-                            <button className="modifier-button" onClick={() => handleEditWish(wish.id)}>Modifier</button>
+                            <button className="modifier-button" onClick={() => handleOpen(wish.id)}>Modifier</button>
                             <button className="supprimer-button" onClick={() => handleDeleteWish(wish.id)}>Supprimer</button>
                         </td>
                     </tr>
@@ -97,6 +107,26 @@ function Repartition() {
                 </tr>
                 </tbody>
             </table>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Modifier le vœu</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="modifiedValue"
+                        label="Nouvelle valeur"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={modifiedValue}
+                        onChange={(e) => setModifiedValue(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Annuler</Button>
+                    <Button onClick={handleSaveWish}>Enregistrer</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

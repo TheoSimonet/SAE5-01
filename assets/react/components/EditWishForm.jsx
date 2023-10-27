@@ -49,4 +49,3 @@ function EditWishForm({ isOpen, onRequestClose, wishId }) {
         </Modal>
     );
 }
-export default EditWishForm;
