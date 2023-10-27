@@ -66,7 +66,16 @@ export function getSubject(id) {
         response.ok ? response.json() : Promise.resolve(null),
     );
 }
-
+export function fetchNbGroup() {
+    return fetch(`${BASE_URL}/nb_groups`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
+export function getNbGroup(id) {
+    return fetch(`${BASE_URL}/nb_groups/${id}`).then((response) =>
+        response.ok ? response.json() : Promise.resolve(null),
+    );
+}
 export function getSubjectGroup(id) {
     const isFullUrl = id.startsWith(BASE_URL + '/groups/');
     const url = isFullUrl ? id : `${BASE_URL}/groups/${id}`;

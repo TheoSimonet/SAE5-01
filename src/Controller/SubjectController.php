@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\NbGroup;
 use App\Entity\Subject;
 use App\Entity\Tag;
 use App\Repository\SemesterRepository;
@@ -155,6 +156,14 @@ class SubjectController extends AbstractController
                             } else {
                                 $this->addFlash('error', 'No subject found for group: '.$subjectCode);
                             }
+
+                            $nbGroup = new NbGroup();
+                            $nbGroup->setNbGroup($row[3]);
+
+                            $group->addNbGroup($nbGroup);
+                            $entityManager->persist($nbGroup);
+                            $entityManager->flush();
+
                         }
                     } else {
                         $this->addFlash('error', 'No data found in sheet: '.$sheetName);
