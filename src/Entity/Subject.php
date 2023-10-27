@@ -47,28 +47,24 @@ class Subject
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
     private ?int $firstWeek = null;
 
     #[ORM\Column]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
     private ?int $lastWeek = null;
-
-    #[ORM\Column(length: 40)]
-    #[Groups(['get_Subject', 'get_Semester'])]
-    private ?string $subjectCode = null;
 
     #[ORM\ManyToOne(inversedBy: 'subjects')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['get_Subject', 'get_Semester'])]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
     private ?Semester $semester = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
@@ -76,6 +72,11 @@ class Subject
 
     #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'subject')]
     private Collection $weeks;
+
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['get_Subject', 'get_Semester', 'get_SubjectCode'])]
+    private ?SubjectCode $subjectCode = null;
 
     public function __construct()
     {
@@ -126,20 +127,6 @@ class Subject
 
         return $this;
     }
-
-    public function getSubjectCode(): ?string
-    {
-        return $this->subjectCode;
-    }
-
-    #[Groups(['get_Subject', 'set_Subject'])]
-    public function setSubjectCode(string $subjectCode): static
-    {
-        $this->subjectCode = $subjectCode;
-
-        return $this;
-    }
-
 
     public function getSemester(): ?Semester
     {
@@ -206,6 +193,18 @@ class Subject
         if ($this->weeks->removeElement($week)) {
             $week->removeSubject($this);
         }
+
+        return $this;
+    }
+
+    public function getSubjectCode(): ?SubjectCode
+    {
+        return $this->subjectCode;
+    }
+
+    public function setSubjectCode(?SubjectCode $subjectCode): static
+    {
+        $this->subjectCode = $subjectCode;
 
         return $this;
     }
