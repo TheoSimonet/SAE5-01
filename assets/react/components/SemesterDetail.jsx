@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {getSemester, fetchNbGroup, fetchSubjects, fetchGroups, getMe} from '../services/api';
+import {getSemester, fetchNbGroup, fetchGroups, getMe} from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
 import "../../styles/semesterDetail.css"
+import NbGroups from "./NbGroups";
 
 function Semester() {
     const [semester, setSemester] = useState(null);
@@ -24,14 +25,6 @@ function Semester() {
                 setNbGroups(groupData.nbGroups);
             } else {
                 console.error("Data from API is not an array:", groupData);
-            }
-
-            // Récupérer les matières
-            const subjectData = await fetchSubjects();
-            if (Array.isArray(subjectData['hydra:member'])) {
-                setSubjects(subjectData['hydra:member']);
-            } else {
-                console.error("Data from API is not an array:", subjectData);
             }
         })()
     }, []);
@@ -65,16 +58,7 @@ function Semester() {
                                                             <ul key={group.id}>
                                                                 <li className="groups">
                                                                     {group.type}
-                                                                    {nbGroups === null
-                                                                        ? 'Aucun Nombre De Groupe Trouvé'
-                                                                        :  nbGroups
-                                                                            .filter((nbGroup) => nbGroup.groups.includes(`/api/groups/${group.id}`))
-                                                                            .map((filteredNbGroup) => (
-                                                                                filteredNbGroup.nbGroup === 0 || filteredNbGroup.nbGroup === null
-                                                                                    ? null
-                                                                                    : <span key={`${filteredNbGroup.id}`}> | {filteredNbGroup.nbGroup}</span>
-                                                                            ))
-                                                                    }
+                                                                    <NbGroups nbGroups={nbGroups} group={group} />
                                                                 </li>
                                                             </ul>
                                                         ))
