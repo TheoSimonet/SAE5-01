@@ -74,6 +74,8 @@ export function getSubjectGroup(id) {
     );
 }
 
+
+
 export function getUserRole(id) {
     return fetch(`${BASE_URL}/users/${id}`, { credentials: "include" })
         .then((response) => {

@@ -79,6 +79,7 @@ function WishForm({ subjectId }) {
                     type="number"
                     id="chosenGroups"
                     name="chosenGroups"
+                    min="1"
                     value={chosenGroups}
                     onChange={(e) => setChosenGroups(parseInt(e.target.value, 10))}
                     className="form-control"
@@ -105,8 +106,6 @@ function WishForm({ subjectId }) {
                             </option>
                         ))}
                 </select>
-
-
             </div>
 
             <button type="submit" className="btn btn-primary">

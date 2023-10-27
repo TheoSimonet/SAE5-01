@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import {getSemester, fetchNbGroup, fetchGroups, getMe} from '../services/api';
+import { getSemester, fetchNbGroup, fetchGroups, getMe } from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
-import "../../styles/semesterDetail.css"
+import "../../styles/semesterDetail.css";
 
-function Semester() {
+function SemesterDetail() {
     const [semester, setSemester] = useState(null);
     const [, params] = useRoute('/react/semesters/:id');
     const [userData, setUserData] = useState(null);
     const [groups, setGroups] = useState([]);
     const [nbGroups, setNbGroups] = useState([]);
-    const [subjects, setSubjects] = useState([]);
 
     useEffect(() => {
         (async () => {
-            setGroups(await fetchGroups())
+            setGroups(await fetchGroups());
 
             const groupData = await fetchNbGroup();
             if (Array.isArray(groupData['hydra:member'])) {
@@ -24,7 +23,7 @@ function Semester() {
             } else {
                 console.error("Data from API is not an array:", groupData);
             }
-        })()
+        })();
     }, []);
 
     useEffect(() => {
@@ -43,6 +42,8 @@ function Semester() {
                     <ul>
                         {semester.subjects.map((subject) => {
                             const subjectId = subject['@id'].split('/').pop();
+                            const subjectGroups = groups.filter((group) => group.subject === subject['@id']);
+
                             return (
                                 <li key={subject['@id']} className="semester-li">
                                     <h2 className={"subjectName"}>{subject.subjectCode + ' - ' + subject.name}</h2>
@@ -50,29 +51,31 @@ function Semester() {
                                     {(userData && userData.roles && userData.roles.includes("ROLE_ADMIN")) ? (
                                         <div>
                                             <div className="groupe-container">
-                                                {groups === null ? 'Aucun Groupe Trouvé' : (
-                                                    groups.filter((group) => group.subject === subject['@id'])
-                                                        .map((group) => (
-                                                            <ul key={group.id}>
-                                                                <li className="groups">
-                                                                    {group.type}
-                                                                    {nbGroups === null
-                                                                        ? 'Aucun Nombre De Groupe Trouvé'
-                                                                        :  nbGroups
-                                                                            .filter((nbGroup) => nbGroup.groups.includes(`/api/groups/${group.id}`))
-                                                                            .map((filteredNbGroup) => (
-                                                                                filteredNbGroup.nbGroup === 0 || filteredNbGroup.nbGroup === null
-                                                                                    ? null
-                                                                                    : <span key={`${filteredNbGroup.id}`}> | {filteredNbGroup.nbGroup}</span>
-                                                                            ))
-                                                                    }
-                                                                </li>
-                                                            </ul>
-                                                        ))
+                                                {subjectGroups.length === 0 ? 'Aucun Groupe Trouvé' : (
+                                                    subjectGroups.map((group) => (
+                                                        <ul key={group.id}>
+                                                            <li className="groups">
+                                                                {group.type}
+                                                                {nbGroups === null
+                                                                    ? 'Aucun Nombre De Groupe Trouvé'
+                                                                    : nbGroups
+                                                                        .filter((nbGroup) => nbGroup.groups.includes(`/api/groups/${group.id}`))
+                                                                        .map((filteredNbGroup) => (
+                                                                            filteredNbGroup.nbGroup === 0 || filteredNbGroup.nbGroup === null
+                                                                                ? null
+                                                                                : <span key={`${filteredNbGroup.id}`}> | {filteredNbGroup.nbGroup}</span>
+                                                                        ))
+                                                                }
+                                                            </li>
+                                                        </ul>
+                                                    ))
                                                 )}
                                             </div>
                                             <div className="Postuler-container">
-                                                <WishForm subjectId={`/api/subjects/${subjectId}`} />
+                                                <WishForm
+                                                    subjectId={`/api/subjects/${subjectId}`}
+                                                    nbGroups={nbGroups}
+                                                />
                                             </div>
                                         </div>
                                     ) : null}
@@ -86,4 +89,4 @@ function Semester() {
     );
 }
 
-export default Semester;
+export default SemesterDetail;

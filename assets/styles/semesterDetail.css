@@ -78,6 +78,15 @@ form select {
     width: 100px;
 }
 
+.groups{
+    list-style-type: none;
+}
+
+.groupe-container{
+    background-color: #D9D9D9;
+    border-radius: 5px;
+}
+
 @media screen and (max-width: 800px) {
     .semester-li {
         width: 100%;
