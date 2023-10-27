@@ -40,7 +40,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             denormalizationContext: ['groups' => ['set_Subject']],
             security: "is_granted('ROLE_USER') and object == user"
         ),
-        ]
+    ]
 )]
 class Subject
 {
@@ -71,15 +71,24 @@ class Subject
     #[Groups(['get_Subject', 'get_Semester', 'get_Tag'])]
     private ?Semester $semester = null;
 
+    #[ORM\ManyToMany(targetEntity: Week::class, mappedBy: 'Subject')]
+    private Collection $weeks;
+
+    #[ORM\ManyToMany(targetEntity: NbGroup::class)]
+    private Collection $idNbGroup;
+
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Group::class, cascade: ['remove'])]
     private Collection $groups;
-
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'subjects')]
     #[Groups(['get_Subject', 'get_Semester'])]
     private Collection $tags;
 
+
+
     public function __construct()
     {
+        $this->weeks = new ArrayCollection();
+        $this->idNbGroup = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
@@ -141,6 +150,7 @@ class Subject
         return $this;
     }
 
+
     public function getSemester(): ?Semester
     {
         return $this->semester;
@@ -184,6 +194,57 @@ class Subject
     }
 
     /**
+     * @return Collection<int, NbGroup>
+     */
+    public function getIdNbGroup(): Collection
+    {
+        return $this->idNbGroup;
+    }
+
+    public function addIdNbGroup(NbGroup $idNbGroup): static
+    {
+        if (!$this->idNbGroup->contains($idNbGroup)) {
+            $this->idNbGroup->add($idNbGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeIdNbGroup(NbGroup $idNbGroup): static
+    {
+        $this->idNbGroup->removeElement($idNbGroup);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Week>
+     */
+    public function getWeeks(): Collection
+    {
+        return $this->weeks;
+    }
+
+    public function addWeek(Week $week): static
+    {
+        if (!$this->weeks->contains($week)) {
+            $this->weeks->add($week);
+            $week->addSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeek(Week $week): static
+    {
+        if ($this->weeks->removeElement($week)) {
+            $week->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, Tag>
      */
     public function getTags(): Collection
@@ -206,4 +267,5 @@ class Subject
 
         return $this;
     }
+
 }

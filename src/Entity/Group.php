@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -62,12 +63,16 @@ class Group
     public function __construct()
     {
         $this->wishes = new ArrayCollection();
+        $this->nbGroups = new ArrayCollection();
     }
 
     #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['group:read', 'group:write'])]
+    #[Groups(['group:read'])]
     private ?Subject $subject = null;
+
+    #[ORM\ManyToMany(targetEntity: NbGroup::class, mappedBy: 'groups')]
+    private Collection $nbGroups;
 
     public function getId(): ?int
     {
@@ -124,6 +129,33 @@ class Group
     public function setSubject(?Subject $subject): static
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NbGroup>
+     */
+    public function getNbGroups(): Collection
+    {
+        return $this->nbGroups;
+    }
+
+    public function addNbGroup(NbGroup $nbGroup): static
+    {
+        if (!$this->nbGroups->contains($nbGroup)) {
+            $this->nbGroups->add($nbGroup);
+            $nbGroup->addGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNbGroup(NbGroup $nbGroup): static
+    {
+        if ($this->nbGroups->removeElement($nbGroup)) {
+            $nbGroup->removeGroup($this);
+        }
 
         return $this;
     }
