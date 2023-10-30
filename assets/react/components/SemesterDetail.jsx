@@ -116,10 +116,14 @@ function Semester() {
                                                                                     return null;
                                                                                 } else {
                                                                                     const groupId = (typeof filteredNbGroup.groups === 'string') ? filteredNbGroup.groups.split('/').pop() : filteredNbGroup.groups;
-                                                                                    const subjectWishes = wishesBySubject[subject['@id']];
-                                                                                    const wishesCount = (subjectWishes && subjectWishes[groupId]) ? subjectWishes[groupId] : 0;
+                                                                                    const subjectWishes = wishesBySubject;
+                                                                                    const count = subjectWishes && subjectWishes[groupId] ? subjectWishes[groupId] : 0;
+                                                                                    console.log('Subject Wishes:', subjectWishes);
+                                                                                    console.log('Group ID:', groupId);
+                                                                                    console.log('Count:', count);
+
                                                                                     return (
-                                                                                        <span key={`${filteredNbGroup.id}`}>| {JSON.stringify(wishesBySubject, null, 2)} / {filteredNbGroup.nbGroup} </span>
+                                                                                        <span key={`${filteredNbGroup.id}`}>| {count} / {filteredNbGroup.nbGroup}</span>
                                                                                     );
                                                                                 }
                                                                             })
