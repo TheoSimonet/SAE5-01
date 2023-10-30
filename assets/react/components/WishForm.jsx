@@ -3,7 +3,7 @@ import { getMe, fetchGroupsBySubject } from '../services/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function WishForm({ subjectId }) {
+function WishForm({ subjectId, onWishAdded }) {
     const [chosenGroups, setChosenGroups] = useState('');
     const [groupeType, setGroupeType] = useState('');
     const [groupeTypes, setGroupeTypes] = useState([]);
@@ -59,6 +59,11 @@ function WishForm({ subjectId }) {
                     closeOnClick: true,
                     theme: 'colored',
                 });
+
+                // Appeler la fonction de rappel lors de l'ajout réussi du vœu
+                if (onWishAdded) {
+                    onWishAdded();
+                }
             })
             .catch((error) => {
                 console.error('Une erreur s\'est produite :', error);
@@ -70,6 +75,7 @@ function WishForm({ subjectId }) {
                 });
             });
     };
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -106,8 +112,6 @@ function WishForm({ subjectId }) {
                             </option>
                         ))}
                 </select>
-
-
             </div>
 
             <button type="submit" className="btn btn-primary">

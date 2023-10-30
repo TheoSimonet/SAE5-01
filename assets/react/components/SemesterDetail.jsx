@@ -86,6 +86,40 @@ function Semester() {
         }
     }, [semester]);
 
+    const fetchWishesAndUpdateCount = async () => {
+        try {
+            const allWishesResponse = await fetch('/api/wishes');
+            if (!allWishesResponse.ok) {
+                throw new Error('La requête pour les souhaits a échoué.');
+            }
+
+            const allWishes = await allWishesResponse.json();
+            console.log('All Wishes:', allWishes);
+
+            const wishesBySubjectData = {};
+
+            if (Array.isArray(allWishes['hydra:member'])) {
+                for (const wish of allWishes['hydra:member']) {
+                    const groupeType = wish.groupeType;
+                    const chosenGroups = wish.chosenGroups || 0;
+
+                    if (!wishesBySubjectData[groupeType]) {
+                        wishesBySubjectData[groupeType] = chosenGroups;
+                    } else {
+                        wishesBySubjectData[groupeType] += chosenGroups;
+                    }
+                }
+
+                console.log('Wishes Count by Group:', wishesBySubjectData);
+                setWishesBySubject(wishesBySubjectData); // Mise à jour de l'état avec les valeurs cumulées
+            } else {
+                console.error("hydra:member n'est pas un tableau :", allWishes['hydra:member']);
+            }
+        } catch (error) {
+            console.error("Une erreur s'est produite lors du traitement des souhaits :", error);
+        }
+    };
+
     return (
         <div>
             {semester === null ? 'Loading...' : (
@@ -116,12 +150,7 @@ function Semester() {
                                                                                     return null;
                                                                                 } else {
                                                                                     const groupId = (typeof filteredNbGroup.groups === 'string') ? filteredNbGroup.groups.split('/').pop() : filteredNbGroup.groups;
-                                                                                    const subjectWishes = wishesBySubject;
-                                                                                    const count = subjectWishes && subjectWishes[groupId] ? subjectWishes[groupId] : 0;
-                                                                                    console.log('Subject Wishes:', subjectWishes);
-                                                                                    console.log('Group ID:', groupId);
-                                                                                    console.log('Count:', count);
-
+                                                                                    const count = wishesBySubject && wishesBySubject[groupId] ? wishesBySubject[groupId] : 0;
                                                                                     return (
                                                                                         <span key={`${filteredNbGroup.id}`}>| {count} / {filteredNbGroup.nbGroup}</span>
                                                                                     );
@@ -134,7 +163,7 @@ function Semester() {
                                                 )}
                                             </div>
                                             <div className="Postuler-container">
-                                                <WishForm subjectId={`/api/subjects/${subjectId}`} />
+                                                <WishForm subjectId={`/api/subjects/${subjectId}`} onWishAdded={fetchWishesAndUpdateCount} />
                                             </div>
                                         </div>
                                     ) : null}
