@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {getSemester, fetchNbGroup, fetchGroups, getMe} from '../services/api';
+import {
+    getSemester,
+    fetchNbGroup,
+    fetchGroups,
+    getMe,
+} from '../services/api';
 import { useRoute } from 'wouter';
 import WishForm from './WishForm';
 import "../../styles/semesterDetail.css"
@@ -10,7 +15,7 @@ function Semester() {
     const [userData, setUserData] = useState(null);
     const [groups, setGroups] = useState([]);
     const [nbGroups, setNbGroups] = useState([]);
-    const [subjects, setSubjects] = useState([]);
+    const [wishesBySubject, setWishesBySubject] = useState({});
 
     useEffect(() => {
         (async () => {
@@ -36,6 +41,51 @@ function Semester() {
         });
     }, [params.id]);
 
+    const getWishesCountBySubject = async () => {
+        try {
+            const allWishesResponse = await fetch('/api/wishes');
+            if (!allWishesResponse.ok) {
+                throw new Error('La requête pour les souhaits a échoué.');
+            }
+
+            const allWishes = await allWishesResponse.json();
+            console.log('All Wishes:', allWishes);
+
+            const wishesBySubjectData = {};
+
+            if (Array.isArray(allWishes['hydra:member'])) {
+                for (const wish of allWishes['hydra:member']) {
+                    const groupeType = wish.groupeType;
+                    const chosenGroups = wish.chosenGroups || 0;
+
+                    if (!wishesBySubjectData[groupeType]) {
+                        wishesBySubjectData[groupeType] = chosenGroups;
+                    } else {
+                        wishesBySubjectData[groupeType] += chosenGroups;
+                    }
+                }
+
+                console.log('Wishes Count by Group:', wishesBySubjectData);
+                setWishesBySubject(wishesBySubjectData); // Mise à jour de l'état avec les valeurs cumulées
+            } else {
+                console.error("hydra:member n'est pas un tableau :", allWishes['hydra:member']);
+            }
+        } catch (error) {
+            console.error("Une erreur s'est produite lors du traitement des souhaits :", error);
+        }
+    };
+
+    useEffect(() => {
+        if (semester !== null) {
+            getWishesCountBySubject()
+                .then(() => {
+                })
+                .catch(error => {
+                    console.error("Une erreur s'est produite :", error);
+                });
+        }
+    }, [semester]);
+
     return (
         <div>
             {semester === null ? 'Loading...' : (
@@ -56,16 +106,24 @@ function Semester() {
                                                             <ul key={group.id}>
                                                                 <li className="groups">
                                                                     {group.type}
-                                                                    {nbGroups === null
-                                                                        ? 'Aucun Nombre De Groupe Trouvé'
-                                                                        :  nbGroups
+                                                                    {nbGroups === null ? (
+                                                                        'Aucun Nombre De Groupe Trouvé'
+                                                                    ) : (
+                                                                        nbGroups
                                                                             .filter((nbGroup) => nbGroup.groups.includes(`/api/groups/${group.id}`))
-                                                                            .map((filteredNbGroup) => (
-                                                                                filteredNbGroup.nbGroup === 0 || filteredNbGroup.nbGroup === null
-                                                                                    ? null
-                                                                                    : <span key={`${filteredNbGroup.id}`}> | {filteredNbGroup.nbGroup}</span>
-                                                                            ))
-                                                                    }
+                                                                            .map((filteredNbGroup) => {
+                                                                                if (filteredNbGroup.nbGroup === 0 || filteredNbGroup.nbGroup === null) {
+                                                                                    return null;
+                                                                                } else {
+                                                                                    const groupId = (typeof filteredNbGroup.groups === 'string') ? filteredNbGroup.groups.split('/').pop() : filteredNbGroup.groups;
+                                                                                    const subjectWishes = wishesBySubject[subject['@id']];
+                                                                                    const wishesCount = (subjectWishes && subjectWishes[groupId]) ? subjectWishes[groupId] : 0;
+                                                                                    return (
+                                                                                        <span key={`${filteredNbGroup.id}`}>| {JSON.stringify(wishesBySubject, null, 2)} / {filteredNbGroup.nbGroup} </span>
+                                                                                    );
+                                                                                }
+                                                                            })
+                                                                    )}
                                                                 </li>
                                                             </ul>
                                                         ))
@@ -87,3 +145,4 @@ function Semester() {
 }
 
 export default Semester;
+

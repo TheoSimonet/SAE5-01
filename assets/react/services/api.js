@@ -22,6 +22,8 @@ export function getGroup(id) {
     );
 }
 
+
+
 export function fetchGroupsBySubject(subjectId) {
     return fetch(`${BASE_URL}/groups?subject=${subjectId}`)
         .then((response) => {
@@ -131,5 +133,28 @@ export async function updateWish(wishId, updatedWishData) {
     } else {
         throw new Error('Erreur lors de la mise à jour du vœu');
     }
+}
+
+export async function WishesBySubject() {
+    const allWishes = await fetchWishes();
+    const wishesBySubject = {};
+
+    for (const wish of allWishes) {
+        const subjectId = wish.subjectId;
+        if (!wishesBySubject[subjectId]) {
+            wishesBySubject[subjectId] = {};
+        }
+
+        const groups = await fetchGroupsBySubject(subjectId);
+        for (const group of groups) {
+            const groupId = group.id;
+            if (!wishesBySubject[subjectId][groupId]) {
+                wishesBySubject[subjectId][groupId] = 0;
+            }
+            wishesBySubject[subjectId][groupId]++;
+        }
+    }
+
+    return wishesBySubject;
 }
 
