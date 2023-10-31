@@ -130,7 +130,6 @@ function Semester() {
                             return (
                                 <li key={subject['@id']} className="semester-li">
                                     <h2 className={"subjectName"}>{subject.subjectCode + ' - ' + subject.name}</h2>
-                                    <br /><br />
                                     {(userData && userData.roles && userData.roles.includes("ROLE_ADMIN")) ? (
                                         <div>
                                             <div className="groupe-container">
@@ -152,7 +151,7 @@ function Semester() {
                                                                                     const groupId = (typeof filteredNbGroup.groups === 'string') ? filteredNbGroup.groups.split('/').pop() : filteredNbGroup.groups;
                                                                                     const count = wishesBySubject && wishesBySubject[groupId] ? wishesBySubject[groupId] : 0;
                                                                                     return (
-                                                                                        <span key={`${filteredNbGroup.id}`}>| {count} / {filteredNbGroup.nbGroup}</span>
+                                                                                        <span key={`${filteredNbGroup.id}`}>| {count}/{filteredNbGroup.nbGroup}</span>
                                                                                     );
                                                                                 }
                                                                             })

@@ -64,22 +64,32 @@ form select {
     padding: 10px;
     border: none;
     font-size: 16px;
-    width: 100%;
+    width: 90%;
 }
 
-.modal button {
-    padding: 5px 10px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100px;
+button {
+    display: flex;
+    margin-top: auto;
 }
 
 ul {
     list-style-type: none;
+}
+
+.groupe-container {
+    display: flex;
+    justify-content: center;
+}
+span {
+    margin-right: 10px;
+}
+form {
+    display: flex;
+    margin-top: 10px;
+}
+form {
+    display: flex;
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 800px) {
