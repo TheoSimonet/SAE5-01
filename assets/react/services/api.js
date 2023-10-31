@@ -22,6 +22,8 @@ export function getGroup(id) {
     );
 }
 
+
+
 export function fetchGroupsBySubject(subjectId) {
     return fetch(`${BASE_URL}/groups?subject=${subjectId}`)
         .then((response) => {
@@ -74,6 +76,22 @@ export function getSubjectGroup(id) {
     );
 }
 
+export async function deleteWish(wishId) {
+
+    const response = await fetch(`/api/wishes/${wishId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error('Erreur lors de la suppression du vœu');
+    }
+}
+
 export function getUserRole(id) {
     return fetch(`${BASE_URL}/users/${id}`, { credentials: "include" })
         .then((response) => {
@@ -97,5 +115,46 @@ export function getUserRole(id) {
         .catch((error) => {
             console.error('Error:', error);
         });
+}
+
+export async function updateWish(wishId, updatedWishData) {
+    const url = `${BASE_URL}/wishes/${wishId}`;
+
+    const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedWishData),
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error('Erreur lors de la mise à jour du vœu');
+    }
+}
+
+export async function WishesBySubject() {
+    const allWishes = await fetchWishes();
+    const wishesBySubject = {};
+
+    for (const wish of allWishes) {
+        const subjectId = wish.subjectId;
+        if (!wishesBySubject[subjectId]) {
+            wishesBySubject[subjectId] = {};
+        }
+
+        const groups = await fetchGroupsBySubject(subjectId);
+        for (const group of groups) {
+            const groupId = group.id;
+            if (!wishesBySubject[subjectId][groupId]) {
+                wishesBySubject[subjectId][groupId] = 0;
+            }
+            wishesBySubject[subjectId][groupId]++;
+        }
+    }
+
+    return wishesBySubject;
 }
 
