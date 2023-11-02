@@ -21,7 +21,7 @@
                                 <dt>Email</dt>
                                 <dd>{{ user.email }}</dd>
                             </dl>
-                            <a href="/" class="btn btn">Voir les voeux</a>
+                            <a href="{{ path('app_user_wish_show', {'id': user.id} )}}" class="btn btn">Voir les voeux</a>
                         </div>
                     </div>
                 </div>
