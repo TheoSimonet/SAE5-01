@@ -1,34 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { getMe, fetchGroupsBySubject } from '../services/api';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function WishForm({ subjectId, onWishAdded }) {
+function WishForm({ subjectId, onWishAdded, wishUser }) {
     const [chosenGroups, setChosenGroups] = useState('');
     const [groupeType, setGroupeType] = useState('');
-    const [groupeTypes, setGroupeTypes] = useState([]);
-    const [wishUser, setWishUser] = useState(null);
 
-    useEffect(() => {
-        getMe().then((userData) => {
-            setWishUser(userData);
-        });
-
-        const fetchGroupeTypes = () => {
-            if (subjectId) {
-                fetchGroupsBySubject(subjectId).then((data) => {
-                    setGroupeTypes(data);
-                });
-            }
-        };
-
-        fetchGroupeTypes();
-    }, [subjectId]);
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const selectedGroup = groupeTypes.find((group) => group.id === groupeType);
-        const groupId = selectedGroup ? selectedGroup.id : '';
+
+        // Vérifier si les valeurs requises sont disponibles pour effectuer la requête
+        if (!wishUser || !subjectId || !groupeType) {
+            return;
+        }
 
         const formData = {
             chosenGroups,
@@ -37,22 +21,17 @@ function WishForm({ subjectId, onWishAdded }) {
             wishUser: `/api/users/${wishUser.id}`,
         };
 
-        fetch('/api/wishes', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${wishUser.token}`,
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Erreur de requête');
-                }
-            })
-            .then((data) => {
+        try {
+            const response = await fetch('/api/wishes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${wishUser.token}`,
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
                 toast.success('Vœu ajouté avec succès!', {
                     position: 'top-left',
                     autoClose: 2000,
@@ -64,18 +43,19 @@ function WishForm({ subjectId, onWishAdded }) {
                 if (onWishAdded) {
                     onWishAdded();
                 }
-            })
-            .catch((error) => {
-                console.error('Une erreur s\'est produite :', error);
-                toast.error('Erreur lors de l\'ajout du vœu', {
-                    position: 'top-right',
-                    autoClose: 2000,
-                    closeOnClick: true,
-                    theme: 'colored',
-                });
+            } else {
+                throw new Error('Erreur de requête');
+            }
+        } catch (error) {
+            console.error('Une erreur s\'est produite :', error);
+            toast.error('Erreur lors de l\'ajout du vœu', {
+                position: 'top-right',
+                autoClose: 2000,
+                closeOnClick: true,
+                theme: 'colored',
             });
+        }
     };
-
 
     return (
         <form onSubmit={handleSubmit}>
@@ -102,15 +82,7 @@ function WishForm({ subjectId, onWishAdded }) {
                     className="form-control"
                 >
                     <option value="">Sélectionnez un groupe</option>
-                    {groupeTypes
-                        .filter((group) => {
-                            return group.subject === subjectId;
-                        })
-                        .map((group) => (
-                            <option key={group.id} value={`/api/groups/${group.id}`}>
-                                {group.type}
-                            </option>
-                        ))}
+                    {/* Option pour les types de groupes */}
                 </select>
             </div>
 
