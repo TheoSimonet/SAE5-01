@@ -24,16 +24,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/users/teachers', name: 'app_user_teachers')]
-    public function indexTeachers(UserRepository $repository): Response
-    {
-        $teachers = $repository->findByRole('ROLE_ENSEIGNANT');
-        return $this->render('user/index.html.twig', [
-            'teachers' => $teachers,
-        ]);
-    }
-
     #[IsGranted('ROLE_USER')]
     #[Route('/me', name: 'app_user_show')]
     public function showCurrentUser(): Response

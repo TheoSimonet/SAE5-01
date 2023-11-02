@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-
+use Doctrine\DBAL\Connection;
 /**
  * @extends ServiceEntityRepository<User>
  *
@@ -39,22 +39,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-
-    /**
-     * Récupère tous les utilisateurs avec un rôle spécifique.
-     *
-     * @param string $role Le rôle à rechercher (par exemple, "ROLE_ENSEIGNANT")
-     * @return User[] Un tableau d'utilisateurs avec le rôle spécifié
-     */
-    public function findByRole(string $role): array
-    {
-        return $this->createQueryBuilder('u')
-            ->where(':role MEMBER OF u.roles')
-            ->setParameter('role', $role)
-            ->getQuery()
-            ->getResult();
-    }
-
 
 //    /**
 //     * @return User[] Returns an array of User objects
