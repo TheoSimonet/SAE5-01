@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Voeux de {{ user.firstName }} {{ user.LastName }}</h1>
+    <div class="row">
+        {% for wish in wishes %}
+                <div class="col-md-4 mb-4">
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}

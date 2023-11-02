@@ -24,6 +24,19 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/user/{id}', name: 'app_user_wish_show',
+        requirements: [
+            'id' => "\d+",
+        ]
+    )]
+    public function showWishes( User $user): Response
+    {
+        $wishes = $user->getWish();
+        return $this->render('user/showWish.html.twig',
+            ['wishes' => $wishes, 'user'=> $user]);
+    }
+
+
     #[IsGranted('ROLE_USER')]
     #[Route('/me', name: 'app_user_show')]
     public function showCurrentUser(): Response
