@@ -162,7 +162,9 @@ function Semester() {
                                                 )}
                                             </div>
                                             <div className="Postuler-container">
-                                                <WishForm subjectId={`/api/subjects/${subjectId}`} onWishAdded={fetchWishesAndUpdateCount} />
+                                                {userData && (
+                                                    <WishForm subjectId={`/api/subjects/${subjectId}`} onWishAdded={fetchWishesAndUpdateCount} userData={userData} />
+                                                )}
                                             </div>
                                         </div>
                                     ) : null}
