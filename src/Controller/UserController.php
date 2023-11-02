@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/user', name: 'app_user')]
-    public function index(): Response
+    #[Route('/users', name: 'app_user')]
+    public function index(UserRepository $repository): Response
     {
+        $users = $repository->findAll();
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+            'users' => $users,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/users/teachers', name: 'app_user_teachers')]
+    public function indexTeachers(UserRepository $repository): Response
+    {
+        $teachers = $repository->findByRole('ROLE_ENSEIGNANT');
+        return $this->render('user/index.html.twig', [
+            'teachers' => $teachers,
         ]);
     }
 
