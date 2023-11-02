@@ -1,15 +1,34 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Voeux de {{ user.firstName }} {{ user.LastName }} {% endblock %}
+
+
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/wish.css') }}">
 {% endblock %}
 
 {% block body %}
-    <h1>Voeux de {{ user.firstName }} {{ user.LastName }}</h1>
+    <h1>Voeux de {{ user.firstName }} {{ user.lastName }}</h1>
     <div class="row">
-        {% for wish in wishes %}
+        {% if wishes is empty %}
+            <h2>Aucun voeux pour l'utilisateur</h2>
+        {% else %}
+            {% for wish in wishes %}
                 <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Voeux {{ wish.id }}</h2>
+                            <dl>
+                                <dt>Matière</dt>
+                                <dd>{{ wish.subjectId.name }}</dd>
+                                <dt>Détail</dt>
+                                <dd>{{ wish.chosenGroups }} groupe(s) de {{ wish.groupeType.type }}</dd>
+                            </dl>
+                            <a href="{{ path('app_wish_edit', {'id': wish.id} )}}" class="btn btn-primary">Modifier</a>
+                        </div>
+                    </div>
                 </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
