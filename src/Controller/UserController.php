@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,13 +15,27 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/user', name: 'app_user')]
-    public function index(): Response
+    #[Route('/users', name: 'app_user')]
+    public function index(UserRepository $repository): Response
     {
+        $users = $repository->findAll();
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+            'users' => $users,
         ]);
     }
+
+    #[Route('/user/{id}', name: 'app_user_wish_show',
+        requirements: [
+            'id' => "\d+",
+        ]
+    )]
+    public function showWishes( User $user): Response
+    {
+        $wishes = $user->getWish();
+        return $this->render('user/showWish.html.twig',
+            ['wishes' => $wishes, 'user'=> $user]);
+    }
+
 
     #[IsGranted('ROLE_USER')]
     #[Route('/me', name: 'app_user_show')]

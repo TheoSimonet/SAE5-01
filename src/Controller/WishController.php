@@ -56,7 +56,7 @@ class WishController extends AbstractController
         ]);
     }
 
-    /*#[Route('/wish/edit/{id}', 'app_wish_edit', methods: ['GET', 'POST'])]
+    #[Route('/wish/edit/{id}', 'app_wish_edit', methods: ['GET', 'POST'])]
     public function edit(Wish $wish, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(WishType::class, $wish);
@@ -64,13 +64,13 @@ class WishController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
-            return $this->redirectToRoute('app_wish');
+            return $this->redirectToRoute('app_user');
         }
 
         return $this->render('/wish/_form.html.twig', [
             'form' => $form->createView(),
         ]);
-    } */
+    }
 
     #[Route('wish/delete/{id}', 'app_wish_delete', methods: ['GET'])]
     public function delete(Wish $wish, EntityManagerInterface $manager): Response
